@@ -1,2 +1,6 @@
-# GameWebsite
-A website for browser games.
+Проект: Website за browser игри
+
+Участници: 
+  Димитър Мяшков 8б клас;
+  Мартин Недков 8б клас;
+  Йордан Йончев 8б клас.
