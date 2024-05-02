@@ -3,6 +3,7 @@
     <title>FreePlay Hub</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="MainPageStyle.css">
+    <script src="MainPageButtons.js"></script>
 </head>
 <body>
     <header>
@@ -10,10 +11,12 @@
         <div class="Nav">
             <ul>
 
-                <li><a href="aboutuspage">About Us</a></li>
-                <li><a href="contactspage">Contact</a></li>
-                <li><a href="gamepage">Help</a></li>
+                <li><a onmouseover="Lighten(this)" onmouseout="Darken(this)" href="contactspage">About Us</a></li>
+                    
+                <li><a onmouseover="Lighten(this)" onmouseout="Darken(this)" href="contactspage">Contact</a></li>
+                <li><a onmouseover="Lighten(this)" onmouseout="Darken(this)" href="gamepage">Help</a></li>
             </ul>
+            <img src="rainbow-yeye.gif" class="rainbow" />
         </div>
     </header>
 </body>
