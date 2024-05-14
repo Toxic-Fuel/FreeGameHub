@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body,
+        canvas {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta charset="UTF-8">
+    </meta>
+</head>
+
+<body onload="onBodyLoad()">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaT22hej5Yc6wFsHUirBwldW7ZenjeiYhSkRjPHMPcbg&s"
+        style="position: absolute; right:50px ;">
+    <canvas id="canvas-id" width="1000" height="700">
+        <script>
+            // How often will the update function from game.js be executed
+            let updateTime;
+
+            // More global variables
+            let canvas, context;
+
+            // Access to functions, created in game.js
+            var update, draw, mouseup, mousemove, mousedown, keyup, keydown, init;
+
+            const reqAnimationFrame = window.requestAnimationFrame;
+
+
+            function randomInteger(upTo) {
+                return Math.floor(Math.random() * upTo);
+            }
+
+            function isFunction(f) {
+                return typeof (f) == "function";
+            }
+
+            function updateMousePosition(e) {
+                let boundingRect = canvas.getBoundingClientRect();
+                mouseX = e.pageX - boundingRect.x;
+                mouseY = e.pageY - boundingRect.y;
+            }
+
+
+            function getCanvas() {
+                // Get canvas element
+                canvas = document.getElementById("canvas-id");
+
+                // Change canvas.width and .height on browser resize
+
+                // Default canvas size
+                canvas.width = 1000;
+                canvas.height = 700;
+
+                // Get 2d context
+                context = canvas.getContext("2d");
+                context.fillStyle = "#0000ff";
+            }
+
+            function attachEvents() {
+                // Update global mouseX, mouseY variables
+                window.addEventListener("mousemove", function (e) {
+                    updateMousePosition(e);
+                });
+
+                // Call mouseup function from game.js
+                if (isFunction(mouseup)) {
+                    window.addEventListener("mouseup", mouseup);
+                }
+
+            }
+            // Redraw will be executed many times
+            function redraw() {
+                // Clear the canvas
+                context.clearRect(0, 0, canvas.width, canvas.height);
+
+
+                // Call draw function from game.js
+                draw();
+
+                // Call redraw after some time (the browser decides this time)
+                reqAnimationFrame(redraw);
+            };
+
+            // Starts game when body element is loaded
+            function onBodyLoad() {
+                getCanvas();
+
+                attachEvents();
+
+                redraw();
+                setInterval(update, updateTime);
+            }
+        </script>
+        <script src="game.js"></script>
+    </canvas>
+</body>
+
+</html>
