@@ -20,14 +20,12 @@
         style="position: absolute; right:50px ;">
     <canvas id="canvas-id" width="1000" height="700">
         <script>
-            // How often will the update function from game.js be executed
-            let updateTime;
 
             // More global variables
             let canvas, context;
 
             // Access to functions, created in game.js
-            var update, draw, mouseup, mousemove, mousedown, keyup, keydown, init;
+            var draw, mouseup, init;
 
             const reqAnimationFrame = window.requestAnimationFrame;
 
@@ -94,7 +92,6 @@
                 attachEvents();
 
                 redraw();
-                setInterval(update, updateTime);
             }
         </script>
         <script src="game.js"></script>
