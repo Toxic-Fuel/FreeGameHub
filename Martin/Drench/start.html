@@ -38,10 +38,10 @@
                 return typeof (f) == "function";
             }
 
-            function updateMousePosition(e) {
+            function updateMousePosition(mouse) {
                 let boundingRect = canvas.getBoundingClientRect();
-                mouseX = e.pageX - boundingRect.x;
-                mouseY = e.pageY - boundingRect.y;
+                mouseX = mouse.pageX - boundingRect.x;
+                mouseY = mouse.pageY - boundingRect.y;
             }
 
 
@@ -57,13 +57,12 @@
 
                 // Get 2d context
                 context = canvas.getContext("2d");
-                context.fillStyle = "#0000ff";
             }
 
             function attachEvents() {
-                // Update global mouseX, mouseY variables
-                window.addEventListener("mousemove", function (e) {
-                    updateMousePosition(e);
+                // Update global mouseX, mouseY variables   
+                window.addEventListener("mousemove", function (mouse) {
+                    updateMousePosition(mouse);
                 });
 
                 // Call mouseup function from game.js

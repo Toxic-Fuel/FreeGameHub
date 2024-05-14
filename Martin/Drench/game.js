@@ -4,6 +4,7 @@ const colors = ["red", "blue", "green", "magenta", "black", "gold"];
 const gridColors = [];
 const widthButton = 100, heightButton = 420 / colors.length;
 let lost = false;
+let won = false, win_check = true;
 let jivoti = 30;
 for (let i = 0; i < sizeX; i++) {
 	gridColors[i] = [];
@@ -34,15 +35,32 @@ function draw() {
 		context.fillRect(800, 200 + i * heightButton, widthButton, heightButton);
 	}
 	if (lost) {
-		context.fillStyle = "black";
+		context.fillStyle = "red";
 		context.globalAlpha = 0.6;
 		context.fillRect(0, 0, 720, 700);
 		context.globalAlpha = 1;
-		context.fillStyle = "#black";
+		context.fillStyle = "black";
 		context.fillRect(125, 175, 450, 350);
 		context.fillStyle = "red";
 		context.font = "50px MS PGothic";
 		context.fillText("GAME OVER", 210, 300);
+		context.strokeStyle = "red"
+		context.lineWidth = 2
+		context.strokeRect(270, 350, 150, 70)
+		context.fillStyle = "red";
+		context.font = "20px MS PGothic";
+		context.fillText("RESTART", 302.5, 392.5);
+	}
+	if (won) {
+		context.fillStyle = "red";
+		context.globalAlpha = 0.6;
+		context.fillRect(0, 0, 720, 700);
+		context.globalAlpha = 1;
+		context.fillStyle = "black";
+		context.fillRect(125, 175, 450, 350);
+		context.fillStyle = "red";
+		context.font = "50px MS PGothic";
+		context.fillText("YOU WON", 240, 300);
 		context.strokeStyle = "red"
 		context.lineWidth = 2
 		context.strokeRect(270, 350, 150, 70)
@@ -85,23 +103,36 @@ function drench(colorInd) {
 			gridColors[currx][curry + 1] = colorInd;
 		}
 	}
+	for (let i = 0; i < sizeX; i++) {
+		for (let j = 0; j < sizeY; j++) {
+			if (gridColors[i][j] != colorInd) {
+				win_check = false;
+			}
+		}
+	}
+	if (win_check) {
+		won = true;
+	} else {
+		win_check = true;
+	}
 }
 
 function mouseup() {
-	if (jivoti == 1) {
-		lost = true;
-	}
 	for (let i = 0; i < colors.length; i++) {
-		if (!lost) {
+		if (!lost && !won) {
 			if (mouseX >= 800 && mouseX <= 800 + widthButton && mouseY >= 200 + i * heightButton && mouseY <= 200 + i * heightButton + heightButton) {
 				jivoti = jivoti - 1;
 				drench(i);
 			}
 		}
 	}
-	if (lost) {
+	if (jivoti == 0 && !won) {
+		lost = true;
+	}
+	if (lost || won) {
 		if (mouseX >= 270 && mouseY >= 350 && mouseX <= 420 && mouseY <= 420) {
 			lost = false;
+			won = false;
 			jivoti = 30;
 			for (let i = 0; i < sizeX; i++) {
 				for (let j = 0; j < sizeY; j++) {
