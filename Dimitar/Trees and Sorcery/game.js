@@ -1,19 +1,24 @@
 let player = {x: 0, y: 0, width: 55, height: 110, dir: 0};
 let boss = {x: 0, y: 0, width: 100, height: 150};
-let enemies = [];
 let camera = {x: 0, y: 0, speed: 4}, game = {victory: false, loss: false, pause: false, start: true};
 let updates = 0, timeLeft = 500;
-let runes = [], collectedRunes = 0, framesPlayer = 0, framesEnemies = 0;
+let runes = [], enemies = [], collectedRunes = 0, framesPlayer = 0, framesEnemies = 0;
 // const startBGMusic = new Audio('./music/FullScores/Orchestral Scores/Ove Melaa - Theme Crystalized .mp3');
 // const gameplayBGMusic = new Audio('./music/Loops/Drum Only Loops/Ove Melaa - DrumLoop 1.mp3');
 // const coinCollect = new Audio('./music/Sound Effects/AbstractPackSFX/Files/AbstractSFX/20.mp3');
 // const winBGMusic = new Audio('./music/FullScores/Orchestral Scores/Ove Melaa - Heaven Sings.mp3');
 // const lossBGMusic = new Audio('./music/FullScores/Orchestral SCores/Ove Melaa - Times.mp3');
 
+function pathfind(x1, y1, x2, y2) {
+    //pathfinds from x2, y2 to x1, y1
+    x2 += Math.cos(Math.atan2(Math.abs(y1 - y2), Math.abs(x1 - x2)));
+    y2 += Math.sin(Math.atan2(Math.abs(y1 - y2), Math.abs(x1 - x2)));
+}
+
 function init() {
     for(let i = 0; i < 50; i++){
         runes.push(new Runes(Math.round(Math.random() * (10000 + canvas.width) - 5000 - canvas.width / 2),
-                             Math.round(Math.random() * (10000 + canvas.height) - 5000 - canvas.height / 2), 25));
+                             Math.round(Math.random() * (10000 + canvas.height) - 5000 - canvas.height / 2), 50));
     }
 
     for(let i = 0; i < 10; i++){
@@ -84,25 +89,49 @@ function update() {
                 player.dir = 0;
             }
             
-            if(camera.y >= 5000 - canvas.height / 2 && player.dir == 2){
+            if(camera.y <= 0 + canvas.height / 2 && player.dir == 1){
                 player.dir = 0;
-                camera.speed = 0;
+                camera.y = 0 + canvas.height / 2
+                if(isKeyPressed[65]){
+                    player.dir = 3;
+                }
+                if(isKeyPressed[68]){
+                    player.dir = 4;
+                }
             }
-            if(camera.y <= -5000 + canvas.height / 2 + 4 && player.dir == 1){
+            if(camera.y >= 10000 - canvas.height / 2 && player.dir == 2){
                 player.dir = 0;
-                camera.speed = 0;
+                camera.y = 10000 - canvas.height / 2;
+                if(isKeyPressed[65]){
+                    player.dir = 3;
+                }
+                if(isKeyPressed[68]){
+                    player.dir = 4;
+                }
             }
-            if(camera.x >= 5000 - canvas.width / 2 - 4 && player.dir == 4){
+            if(camera.x <= -5000 + canvas.width / 2 && player.dir == 3){
                 player.dir = 0;
-                camera.speed = 0;
+                camera.x = -5000 + canvas.width / 2;
+                if(isKeyPressed[87]){
+                    player.dir = 1;
+                }
+                if(isKeyPressed[83]){
+                    player.dir = 2;
+                }
             }
-            if(camera.x <= -5000 + canvas.width / 2 + 4 && player.dir == 3){
+            if(camera.x >= 10000 - canvas.width / 2 && player.dir == 4){
                 player.dir = 0;
-                camera.speed = 0;
+                camera.x = 10000 - canvas.width / 2;
+                if(isKeyPressed[87]){
+                    player.dir = 1;
+                }
+                if(isKeyPressed[83]){
+                    player.dir = 2;
+                }
             }
 
             for(let i = 0; i < 50; i++){
-                if(runes[i].collide(camera.x, camera.y, player.width, player.height)){
+                if(areColliding(camera.x, camera.y, player.width, player.height, runes[i].x, runes[i].y, runes[i].size, runes[i].size)){
                     runes[i].x = NaN;
                     collectedRunes++;
                     // coinCollect.play();
@@ -136,11 +165,11 @@ function draw() {
         drawImage(backDarkForest, -5000  + canvas.width / 2 - camera.x, -5000 + canvas.height / 2 - camera.y, 10000, 10000);
         
         for(let i = 0; i < 50; i++){
-            drawImage(rune, runes[i].x + canvas.width / 2 - camera.x, runes[i].y + canvas.height / 2 - camera.y, runes[i].width, runes[i].width);
+            drawImage(rune, runes[i].x + canvas.width / 2 - camera.x, runes[i].y + canvas.height / 2 - camera.y, runes[i].size, runes[i].size);
         }
 
         if(player.dir == 0){
-            drawImage(monkeyStand[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
+            drawImage(monkeyIdle[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
         if(player.dir == 1){
             drawImage(monkeyUp[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
