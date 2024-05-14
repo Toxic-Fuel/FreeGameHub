@@ -13,7 +13,7 @@ let runes = [], collectedRunes = 0, framesPlayer = 0, framesEnemies = 0;
 function init() {
     for(let i = 0; i < 50; i++){
         runes.push(new Runes(Math.round(Math.random() * (10000 + canvas.width) - 5000 - canvas.width / 2),
-                             Math.round(Math.random() * (10000 + canvas.height) - 5000 - canvas.height / 2), 50));
+                             Math.round(Math.random() * (10000 + canvas.height) - 5000 - canvas.height / 2), 25));
     }
 
     for(let i = 0; i < 10; i++){
@@ -36,9 +36,9 @@ function update() {
 
             player.dir = 0;
 
-            for(let i = 0; i < enemies.length; i++){
-                enemies[i].pathfind;
-            }
+            // for(let i = 0; i < enemies.length; i++){
+            //     enemies[i].pathfind;
+            // }
 
             if(updates % 10 == 0){
                 framesPlayer++;
@@ -63,31 +63,42 @@ function update() {
             if(isKeyPressed[87]){
                 player.dir = 1;
                 camera.y -= camera.speed;
-            }else if(isKeyPressed[83]){
+            }
+            if(isKeyPressed[83]){
                 player.dir = 2;
                 camera.y += camera.speed;
-            }else if(isKeyPressed[65]){
+            }
+            if(isKeyPressed[65]){
                 player.dir = 3;
                 camera.x -= camera.speed;
-            }else if(isKeyPressed[68]){
+            }
+            if(isKeyPressed[68]){
                 player.dir = 4;
                 camera.x += camera.speed;
+            }
+
+            if(isKeyPressed[87] && isKeyPressed[83] && !isKeyPressed[65] && !isKeyPressed[68]){
+                player.dir = 0;
+            }
+            if(isKeyPressed[65] && isKeyPressed[68] && !isKeyPressed[87] && !isKeyPressed[83]){
+                player.dir = 0;
             }
             
             if(camera.y >= 5000 - canvas.height / 2 && player.dir == 2){
                 player.dir = 0;
                 camera.speed = 0;
-            }else if(camera.y <= -5000 + canvas.height / 2 + 4 && player.dir == 1){
+            }
+            if(camera.y <= -5000 + canvas.height / 2 + 4 && player.dir == 1){
                 player.dir = 0;
                 camera.speed = 0;
-            }else if(camera.x >= 5000 - canvas.width / 2 - 4 && player.dir == 4){
+            }
+            if(camera.x >= 5000 - canvas.width / 2 - 4 && player.dir == 4){
                 player.dir = 0;
                 camera.speed = 0;
-            }else if(camera.x <= -5000 + canvas.width / 2 + 4 && player.dir == 3){
+            }
+            if(camera.x <= -5000 + canvas.width / 2 + 4 && player.dir == 3){
                 player.dir = 0;
                 camera.speed = 0;
-            }else{
-                camera.speed = 5;
             }
 
             for(let i = 0; i < 50; i++){
@@ -107,17 +118,17 @@ function update() {
         collectedRunes = 0;
     }
 
-    if(game.victory){
-        // winBGMusic.play();
-    }else{
-        // winBGMusic.pause();
-    }
+    // if(game.victory){
+    //     winBGMusic.play();
+    // }else{
+    //     winBGMusic.pause();
+    // }
 
-    if(game.loss){
-        // lossBGMusic.play();
-    }else{
-        // lossBGMusic.pause();
-    }
+    // if(game.loss){
+    //     lossBGMusic.play();
+    // }else{
+    //     lossBGMusic.pause();
+    // }
 }
 
 function draw() {
@@ -130,13 +141,17 @@ function draw() {
 
         if(player.dir == 0){
             drawImage(monkeyStand[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
-        }else if(player.dir == 1){
+        }
+        if(player.dir == 1){
             drawImage(monkeyUp[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
-        }else if(player.dir == 2){
+        }
+        if(player.dir == 2){
             drawImage(monkeyDown[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
-        }else if(player.dir == 3){
+        }
+        if(player.dir == 3){
             drawImage(monkeyLeft[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
-        }else if(player.dir == 4){
+        }
+        if(player.dir == 4){
             drawImage(monkeyRight[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
 
