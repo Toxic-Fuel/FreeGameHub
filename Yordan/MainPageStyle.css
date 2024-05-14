@@ -74,3 +74,30 @@ li {
         font-family: "Cooper";
         font-size: 30pt;
     }
+div.Images {
+display: flex;
+height: 50%;
+width: 80%;
+left: 10%;
+position:relative;
+align-content: flex-start;
+flex-direction: row;
+margin:10px;
+align-items: center;
+justify-content:space-around;
+    
+}
+div.IconImg {
+    flex: 0;
+    display: flex;
+    flex-direction: column;
+    text-align:center;
+    flex-wrap: nowrap;
+    
+}
+img.icon{
+    
+    width:180%;
+    height:180%;
+    
+}

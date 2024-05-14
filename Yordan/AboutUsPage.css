@@ -1,0 +1,49 @@
+#teamofthree{
+    text-align:center;
+    
+}
+h1 {
+    color: white;
+    font-family: "Cooper";
+    
+}
+body {
+    background-color: rebeccapurple;
+    margin: 0;
+}
+img.logo {
+    max-width: 100%;
+    min-height: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+div.Images {
+    display: flex;
+    height: 50%;
+    width: 80%;
+    left: 10%;
+    position:relative;
+    align-content: flex-start;
+    flex-direction: row;
+    margin:10px;
+    align-items: center;
+    justify-content:space-around;
+    grid-auto-rows;
+    
+}
+div.Profile {
+    flex: 0;
+    display: flex;
+    flex-direction: column;
+    text-align:center;
+    flex-wrap: nowrap;
+    
+}
+img.pfp{
+    object-fit:scale-down;
+    width:80%;
+    height:80%;
+    
+}
