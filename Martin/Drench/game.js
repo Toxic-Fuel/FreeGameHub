@@ -4,7 +4,7 @@ const colors = ["red", "blue", "green", "magenta", "black", "gold"];
 const gridColors = [];
 const widthButton = 100, heightButton = 420 / colors.length;
 let lost = false;
-let jivoti = 30
+let jivoti = 30;
 for (let i = 0; i < sizeX; i++) {
 	gridColors[i] = [];
 	for (let j = 0; j < sizeY; j++) {
@@ -12,19 +12,16 @@ for (let i = 0; i < sizeX; i++) {
 	}
 }
 
-function update() {
-}
-
 function draw() {
-	context.fillStyle = "#2F3C7E"
-	context.fillRect(0, 0, 720, 700)
-	context.fillStyle = "#FBEAEB"
-	context.fillRect(720, 120, 280, 700)
-	context.fillStyle = "black"
-	context.fillRect(825, 145, 45, 40)
-	context.fillStyle = "white"
-	context.font = "40px Arial"
-	context.fillText(jivoti, 825, 180)
+	context.fillStyle = "#2F3C7E";
+	context.fillRect(0, 0, 720, 700);
+	context.fillStyle = "#FBEAEB";
+	context.fillRect(720, 120, 280, 700);
+	context.fillStyle = "black";
+	context.fillRect(825, 145, 45, 40);
+	context.fillStyle = "white";
+	context.font = "40px Arial";
+	context.fillText(jivoti, 825, 180);
 	for (let i = 0; i < sizeX; i++) {
 		for (let j = 0; j < sizeY; j++) {
 			context.fillStyle = colors[gridColors[i][j]];
@@ -35,6 +32,23 @@ function draw() {
 	for (let i = 0; i < colors.length; i++) {
 		context.fillStyle = colors[i];
 		context.fillRect(800, 200 + i * heightButton, widthButton, heightButton);
+	}
+	if (lost) {
+		context.fillStyle = "black";
+		context.globalAlpha = 0.6;
+		context.fillRect(0, 0, 720, 700);
+		context.globalAlpha = 1;
+		context.fillStyle = "#black";
+		context.fillRect(125, 175, 450, 350);
+		context.fillStyle = "red";
+		context.font = "50px MS PGothic";
+		context.fillText("GAME OVER", 210, 300);
+		context.strokeStyle = "red"
+		context.lineWidth = 2
+		context.strokeRect(270, 350, 150, 70)
+		context.fillStyle = "red";
+		context.font = "20px MS PGothic";
+		context.fillText("RESTART", 302.5, 392.5);
 	}
 }
 
@@ -74,22 +88,25 @@ function drench(colorInd) {
 }
 
 function mouseup() {
-	if (jivoti == 0) {
+	if (jivoti == 1) {
 		lost = true;
 	}
 	for (let i = 0; i < colors.length; i++) {
 		if (!lost) {
 			if (mouseX >= 800 && mouseX <= 800 + widthButton && mouseY >= 200 + i * heightButton && mouseY <= 200 + i * heightButton + heightButton) {
-				jivoti = jivoti - 1
+				jivoti = jivoti - 1;
 				drench(i);
-				for (let i = 0; i < sizeX; i++) {
-					for (let j = 0; j < sizeY; j++) {
-						if (gridColors[0][0] != gridColors[i][j]) {
-							return false
-						}
-					}
+			}
+		}
+	}
+	if (lost) {
+		if (mouseX >= 270 && mouseY >= 350 && mouseX <= 420 && mouseY <= 420) {
+			lost = false;
+			jivoti = 30;
+			for (let i = 0; i < sizeX; i++) {
+				for (let j = 0; j < sizeY; j++) {
+					gridColors[i][j] = randomInteger(colors.length);
 				}
-				return true
 			}
 		}
 	}
