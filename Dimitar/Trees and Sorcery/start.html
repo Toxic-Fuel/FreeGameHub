@@ -135,10 +135,14 @@
                 { imageName: 'monkeyStand[3]', backupColor: 'brown' }, { imageName: 'monkeyUp[0]', backupColor: 'brown' },
                 { imageName: 'monkeyUp[1]', backupColor: 'brown' }, { imageName: 'monkeyUp[2]', backupColor: 'brown' },
                 { imageName: 'monkeyUp[3]', backupColor: 'brown' }, { imageName: 'rune', backupColor: 'blue'},
-                { imageName: 'skeletonWalk[0]', backupColor: 'brown' }, { imageName: 'skeletonWalk[1]', backupColor: 'brown' },
-                { imageName: 'skeletonWalk[2]', backupColor: 'brown' }, { imageName: 'skeletonWalk[3]', backupColor: 'brown' },
-                { imageName: 'skeletonWalk[4]', backupColor: 'brown' }, { imageName: 'skeletonWalk[5]', backupColor: 'brown' },
-                { imageName: 'skeletonWalk[6]', backupColor: 'brown' }, { imageName: 'skeletonWalk[7]', backupColor: 'brown' },];
+                { imageName: 'skeletonRight[0]', backupColor: 'brown' }, { imageName: 'skeletonRight[1]', backupColor: 'brown' },
+                { imageName: 'skeletonRight[2]', backupColor: 'brown' }, { imageName: 'skeletonRight[3]', backupColor: 'brown' },
+                { imageName: 'skeletonRight[4]', backupColor: 'brown' }, { imageName: 'skeletonRight[5]', backupColor: 'brown' },
+                { imageName: 'skeletonRight[6]', backupColor: 'brown' }, { imageName: 'skeletonRight[7]', backupColor: 'brown' },
+                { imageName: 'skeletonLeft[0]', backupColor: 'brown' }, { imageName: 'skeletonLeft[1]', backupColor: 'brown' },
+                { imageName: 'skeletonLeft[2]', backupColor: 'brown' }, { imageName: 'skeletonLeft[3]', backupColor: 'brown' },
+                { imageName: 'skeletonLeft[4]', backupColor: 'brown' }, { imageName: 'skeletonLeft[5]', backupColor: 'brown' },
+                { imageName: 'skeletonLeft[6]', backupColor: 'brown' }, { imageName: 'skeletonLeft[7]', backupColor: 'brown' }];
 
                 // For each element of array - create a global variable
                 for (let i = 0; i < imageObjectList.length; i++) {
@@ -159,6 +163,15 @@
                     }
                 }
             }());
+
+            function tryToLoad(imageNameWithoutDotPng, backupColor) {
+                return new MyImage("./images/" + imageNameWithoutDotPng + ".png", backupColor);
+            }
+
+            
+            function tryToLoadWithFullPath(pathAndImageName, backupColor) {
+                return new MyImage(pathAndImageName, backupColor);
+            }
 
             function drawImage(myImageObject, x, y, xs, ys) {
                 myImageObject.draw(x, y, xs, ys);
@@ -225,13 +238,6 @@
                 mouseY = e.pageY - boundingRect.y;
             }
 
-            function updateMousePositionTouchEvent(e) {
-                let boundingRect = canvas.getBoundingClientRect();
-                let touchobj = e.changedTouches[0];
-                mouseX = touchobj.pageX - boundingRect.x;
-                mouseY = touchobj.pageY - boundingRect.y;
-            }
-
             function getCanvas() {
                 // Get canvas element
                 canvas = document.getElementById("canvas-id");
@@ -257,28 +263,6 @@
             }
 
             function attachEvents() {
-                // Events for touchscreen devices
-                if ('ontouchstart' in window || navigator.maxTouchPoints) {
-                    isMobile = true;
-                    window.addEventListener("touchstart", function (e) {
-                        // Update global mouseX, mouseY variables
-                        updateMousePositionTouchEvent(e);
-                        if (isFunction(mousedown)) {
-                            // Call mousedown from game.js if it exists
-                            mousedown();
-                        }
-                    });
-                    window.addEventListener("touchend", function (e) {
-                        updateMousePositionTouchEvent(e);
-                        if (isFunction(mouseup)) {
-                            mouseup();
-                        }
-                    });
-                    window.addEventListener("touchmove", function (e) {
-                        updateMousePositionTouchEvent(e);
-                    });
-                }
-
                 // Update global mouseX, mouseY variables
                 window.addEventListener("mousemove", function (e) {
                     updateMousePosition(e);
@@ -340,14 +324,6 @@
                 key_z = 90;
                 isKeyPressed = new Array(256).fill(0);
             }
-            function drawError() {
-                // Draw error text on canvas 
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                context.globalAlpha = 1;
-                context.fillStyle = "#FF0000";
-                context.font = "20px Arial";
-                context.fillText("Press <F12> for error info!", 40, 40);
-            }
             // Starts game when body element is loaded
             function onBodyLoad() {
 
@@ -359,7 +335,6 @@
 
                 if (!isFunction(draw)) {
                     // Draw error on canvas when function draw is not in game.js
-                    drawError();
                     throw new TypeError("draw is not a function (in game.js)");
                 }
 
@@ -370,7 +345,6 @@
 
                 if (!isFunction(update)) {
                     // Draw error on canvas when function update is not in game.js
-                    drawError();
                     throw new TypeError("update is not a function (in game.js)");
                 }
                 redraw();

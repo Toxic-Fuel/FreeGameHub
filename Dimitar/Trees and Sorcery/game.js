@@ -1,9 +1,9 @@
 let player = {x: 0, y: 0, width: 55, height: 110, dir: 0};
 let boss = {x: 0, y: 0, width: 100, height: 150};
-// let enemies = [];
-let camera = {x: 0, y: 0, speed: 4}, game = {victory: false, loss: false, start: false, pause: false};
+let enemies = [];
+let camera = {x: 0, y: 0, speed: 4}, game = {victory: false, loss: false, pause: false, start: true};
 let updates = 0, timeLeft = 500;
-let coins = [], collectedCoins = 0, framesPlayer = 0, framesCoins = 0, framesEnemies = 0;
+let runes = [], collectedRunes = 0, framesPlayer = 0, framesEnemies = 0;
 // const startBGMusic = new Audio('./music/FullScores/Orchestral Scores/Ove Melaa - Theme Crystalized .mp3');
 // const gameplayBGMusic = new Audio('./music/Loops/Drum Only Loops/Ove Melaa - DrumLoop 1.mp3');
 // const coinCollect = new Audio('./music/Sound Effects/AbstractPackSFX/Files/AbstractSFX/20.mp3');
@@ -12,14 +12,14 @@ let coins = [], collectedCoins = 0, framesPlayer = 0, framesCoins = 0, framesEne
 
 function init() {
     for(let i = 0; i < 50; i++){
-        coins.push(new Coins(Math.round(Math.random() * (10000 + canvas.width) - 5000 - canvas.width / 2),
+        runes.push(new Runes(Math.round(Math.random() * (10000 + canvas.width) - 5000 - canvas.width / 2),
                              Math.round(Math.random() * (10000 + canvas.height) - 5000 - canvas.height / 2), 50));
     }
 
-    // for(let i = 0; i < 10; i++){
-    //    enemies.push(new Enemies(Math.round(Math.random() * (10000 + canvas.width) - 5000 - canvas.width / 2),
-    //                             Math.round(Math.random() * (10000 + canvas.height) - 5000 - canvas.height / 2), 100, 25));
-    // }
+    for(let i = 0; i < 10; i++){
+       enemies.push(new Enemies(Math.round(Math.random() * (10000 + canvas.width) - 5000 - canvas.width / 2),
+                                Math.round(Math.random() * (10000 + canvas.height) - 5000 - canvas.height / 2), 100, 25));
+    }
 }
 
 function update() {
@@ -30,13 +30,15 @@ function update() {
     // }
 
     if(game.start && !game.loss && !game.victory){
-
         updates++;
-
         if(!game.pause){
             // gameplayBGMusic.play();
 
             player.dir = 0;
+
+            for(let i = 0; i < enemies.length; i++){
+                enemies[i].pathfind;
+            }
 
             if(updates % 10 == 0){
                 framesPlayer++;
@@ -45,12 +47,6 @@ function update() {
                 framesPlayer = 0;
             }
 
-            if(updates % 10 == 0){
-                framesCoins++
-            }
-            if(framesCoins == 8){
-                framesCoins = 0;
-            }
             if(updates % 100 == 0){
                 timeLeft--;
             }
@@ -60,7 +56,9 @@ function update() {
             if(updates % 20 == 0){
                 framesEnemies++;
             }
-            // if()
+            if(framesEnemies >= 7){
+                framesEnemies = 0;
+            }
             
             if(isKeyPressed[87]){
                 player.dir = 1;
@@ -93,41 +91,41 @@ function update() {
             }
 
             for(let i = 0; i < 50; i++){
-                if(coins[i].collide(camera.x, camera.y, player.width, player.height)){
-                    coins[i].x = NaN;
-                    collectedCoins++;
+                if(runes[i].collide(camera.x, camera.y, player.width, player.height)){
+                    runes[i].x = NaN;
+                    collectedRunes++;
                     // coinCollect.play();
                 }
             }
 
-            if(collectedCoins >= 50){
+            if(collectedRunes >= 50){
                 game.victory = true;
             }
         }
     }else{
-        gameplayBGMusic.pause();
-        collectedCoins = 0;
+        // gameplayBGMusic.pause();
+        collectedRunes = 0;
     }
 
     if(game.victory){
         // winBGMusic.play();
     }else{
-        winBGMusic.pause();
+        // winBGMusic.pause();
     }
 
     if(game.loss){
         // lossBGMusic.play();
     }else{
-        lossBGMusic.pause();
+        // lossBGMusic.pause();
     }
 }
 
 function draw() {
-    if(game.start && !game.loss && !game.victory){
+    if(!game.loss && !game.victory && game.start){
         drawImage(backDarkForest, -5000  + canvas.width / 2 - camera.x, -5000 + canvas.height / 2 - camera.y, 10000, 10000);
         
         for(let i = 0; i < 50; i++){
-            drawImage(coin[framesCoins], coins[i].x + canvas.width / 2 - camera.x, coins[i].y + canvas.height / 2 - camera.y, coins[i].width, coins[i].width);
+            drawImage(rune, runes[i].x + canvas.width / 2 - camera.x, runes[i].y + canvas.height / 2 - camera.y, runes[i].width, runes[i].width);
         }
 
         if(player.dir == 0){
@@ -144,15 +142,11 @@ function draw() {
 
         context.fillStyle = '#FFC300';
         context.font = '50px MS PGothic';
-        context.fillText(`Coins: ${collectedCoins} / 50`, 10, 0);
+        context.fillText(`runes: ${collectedRunes} / 50`, 10, 0);
 
         context.fillStyle = '#FF0000';
         context.font = '50px MS PGothic';
         context.fillText(`Time: ${timeLeft}`, canvas.width - 225, 0);
-
-        for(let i = 0; i < 10; i++){
-
-        }
 
         if(game.pause){
             context.fillStyle = '#FFFFFF';
@@ -167,15 +161,6 @@ function draw() {
             context.font = '75px MS PGothic';
             context.fillText('Press "Esc" to continue', canvas.width / 2 - 400, 300);
         }
-    }
-
-    if(!game.start){
-        drawImage(backDarkForest, 0, 0, canvas.width, canvas.height);
-        drawImage(monkeyStand[framesPlayer], canvas.width / 2 - 27.5, canvas.height / 2 + player.width, player.width, player.height);
-
-        context.fillStyle = '#000000';
-        context.font = '100px bold MS PGothic';
-        context.fillText('Trees & Sorcery', canvas.width / 2 - 350, canvas.height / 2 - 300);
     }
 
     if(game.victory){
@@ -212,13 +197,10 @@ function keydown(key) {
         game.pause = false;
     }
 
-    if(key == 13 && !game.start){
-        game.start = true;
-    }
-
     if(key == 13 && game.victory || game.loss){
         game.victory = false;
         game.loss = false;
-        game.start = false;
+        game.start = true;
+        timeLeft = 500;
     }
 }
