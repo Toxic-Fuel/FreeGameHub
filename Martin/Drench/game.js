@@ -1,8 +1,8 @@
 const sizeX = 10, sizeY = 10;
-const width = 500 / sizeX, height = 500 / sizeY;
+const width = 580 / sizeX, height = 580 / sizeY;
 const colors = ["red", "blue", "green", "magenta", "black", "gold"];
 const gridColors = [];
-const widthButton = 100, heightButton = 420 / colors.length;
+const widthButton = 150, heightButton = 600 / colors.length;
 let lost = false;
 let won = false, win_check = true;
 let jivoti = 30;
@@ -15,38 +15,42 @@ for (let i = 0; i < sizeX; i++) {
 
 function draw() {
 	context.fillStyle = "#2F3C7E";
-	context.fillRect(0, 0, 720, 700);
+	context.fillRect(0, 0, 720, 760);
 	context.fillStyle = "#FBEAEB";
-	context.fillRect(720, 120, 280, 700);
+	context.fillRect(720, 120, 820, 640);
 	context.fillStyle = "black";
-	context.fillRect(825, 145, 45, 40);
+	context.fillRect(750, 145, 45, 40);
 	context.fillStyle = "white";
 	context.font = "40px Arial";
-	context.fillText(jivoti, 825, 180);
+	context.fillText(jivoti, 750, 180);
 	for (let i = 0; i < sizeX; i++) {
 		for (let j = 0; j < sizeY; j++) {
 			context.fillStyle = colors[gridColors[i][j]];
-			context.fillRect(100 + i * width, 100 + j * height, width - 1, height - 1);
+			context.fillRect(65 + i * width, 90 + j * height, width - 1, height - 1);
 		}
 	}
 
-	for (let i = 0; i < colors.length; i++) {
+	for (let i = 0; i < 3; i++) {
 		context.fillStyle = colors[i];
-		context.fillRect(800, 200 + i * heightButton, widthButton, heightButton);
+		context.fillRect(850 + i * widthButton + i * 60, 300, widthButton, heightButton);
+	}
+	for (let i = 3; i < 6; i++) {
+		context.fillStyle = colors[i];
+		context.fillRect(850 + (i - 3) * widthButton + (i - 3) * 60, 470, widthButton, heightButton);
 	}
 	if (lost) {
 		context.fillStyle = "red";
 		context.globalAlpha = 0.6;
-		context.fillRect(0, 0, 720, 700);
+		context.fillRect(0, 0, 720, 760);
 		context.globalAlpha = 1;
 		context.fillStyle = "black";
 		context.fillRect(125, 175, 450, 350);
 		context.fillStyle = "red";
 		context.font = "50px MS PGothic";
 		context.fillText("GAME OVER", 210, 300);
-		context.strokeStyle = "red"
-		context.lineWidth = 2
-		context.strokeRect(270, 350, 150, 70)
+		context.strokeStyle = "red";
+		context.lineWidth = 2;
+		context.strokeRect(270, 350, 150, 70);
 		context.fillStyle = "red";
 		context.font = "20px MS PGothic";
 		context.fillText("RESTART", 302.5, 392.5);
@@ -54,7 +58,7 @@ function draw() {
 	if (won) {
 		context.fillStyle = "red";
 		context.globalAlpha = 0.6;
-		context.fillRect(0, 0, 720, 700);
+		context.fillRect(0, 0, 720, 760);
 		context.globalAlpha = 1;
 		context.fillStyle = "black";
 		context.fillRect(125, 175, 450, 350);
@@ -118,9 +122,15 @@ function drench(colorInd) {
 }
 
 function mouseup() {
-	for (let i = 0; i < colors.length; i++) {
-		if (!lost && !won) {
-			if (mouseX >= 800 && mouseX <= 800 + widthButton && mouseY >= 200 + i * heightButton && mouseY <= 200 + i * heightButton + heightButton) {
+	if (!lost && !won) {
+		for (let i = 0; i < 3; i++) {
+			if (mouseX >= 850 + i * widthButton + i * 60 && mouseX <= 850 + i * widthButton + i * 60 + widthButton && mouseY >= 300 && mouseY <= 300 + heightButton) {
+				jivoti = jivoti - 1;
+				drench(i);
+			}
+		}
+		for (let i = 3; i < colors.length; i++) {
+			if (mouseX >= 850 + (i - 3) * widthButton + (i - 3) * 60 && mouseX <= 850 + (i - 3) * widthButton + (i - 3) * 60 + widthButton && mouseY >= 470 && mouseY <= 470 + heightButton) {
 				jivoti = jivoti - 1;
 				drench(i);
 			}
