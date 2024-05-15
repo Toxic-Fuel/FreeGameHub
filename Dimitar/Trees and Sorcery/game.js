@@ -3,17 +3,9 @@ let boss = {x: 0, y: 0, width: 100, height: 150};
 let camera = {x: 0, y: 0, speed: 4}, game = {victory: false, loss: false, pause: false, start: true};
 let updates = 0, timeLeft = 500;
 let runes = [], enemies = [], collectedRunes = 0, framesPlayer = 0, framesEnemies = 0;
-// const startBGMusic = new Audio('./music/FullScores/Orchestral Scores/Ove Melaa - Theme Crystalized .mp3');
 // const gameplayBGMusic = new Audio('./music/Loops/Drum Only Loops/Ove Melaa - DrumLoop 1.mp3');
-// const coinCollect = new Audio('./music/Sound Effects/AbstractPackSFX/Files/AbstractSFX/20.mp3');
 // const winBGMusic = new Audio('./music/FullScores/Orchestral Scores/Ove Melaa - Heaven Sings.mp3');
 // const lossBGMusic = new Audio('./music/FullScores/Orchestral SCores/Ove Melaa - Times.mp3');
-
-function pathfind(x1, y1, x2, y2) {
-    //pathfinds from x2, y2 to x1, y1
-    x2 += Math.cos(Math.atan2(Math.abs(y1 - y2), Math.abs(x1 - x2)));
-    y2 += Math.sin(Math.atan2(Math.abs(y1 - y2), Math.abs(x1 - x2)));
-}
 
 function init() {
     for(let i = 0; i < 50; i++){
@@ -21,9 +13,9 @@ function init() {
                                         Math.round(Math.random() * (10000 + canvas.height) - 5000), 50));
     }
 
-    for(let i = 0; i < 10; i++){
-       enemies.push(new Enemies(Math.round(Math.random() * (10000 + canvas.width) - 5000 - canvas.width / 2),
-                                Math.round(Math.random() * (10000 + canvas.height) - 5000 - canvas.height / 2), 100, 25));
+    for(let i = 0; i < 100; i++){
+       enemies.push(new Enemies(Math.round(Math.random() * 10000 - 5000 - canvas.width / 2),
+                                Math.round(Math.random() * 10000 - 5000 - canvas.height / 2), 100, 25));
     }
 }
 
@@ -41,9 +33,10 @@ function update() {
 
             player.dir = 0;
 
-            // for(let i = 0; i < enemies.length; i++){
-            //     enemies[i].pathfind;
-            // }
+           for(let i = 0; i < 100; i++){
+                enemies[i].x += Math.atan2(Math.sin(Math.abs(player.y - enemies[i].y)), Math.cos(Math.abs(player.x - enemies[i].x))) * 5;
+                enemies[i].y += Math.atan2(Math.sin(Math.abs(player.y - enemies[i].y)), Math.cos(Math.abs(player.x - enemies[i].x))) * 5;
+            }
 
             if(updates % 10 == 0){
                 framesPlayer++;
@@ -80,21 +73,21 @@ function update() {
             }
 
             // border
-            if(camera.y <= -5000 + canvas.height / 2 && player.dir == 1){ // raboti
+            if(camera.y <= -5000 + canvas.height / 2 && player.dir == 1){
                 player.dir = 0;
                 camera.y = -5000 + canvas.height / 2;
             }
-            if(camera.y >= 10000 - canvas.height / 2 && player.dir == 2){ // ne raboti nz zashto
+            if(camera.y >= 5000 - canvas.height / 2 && player.dir == 2){
                 player.dir = 0;
-                camera.y = 10000 - canvas.height / 2;
+                camera.y = 5000 - canvas.height / 2;
             }
-            if(camera.x <= -5000 + canvas.width / 2 && player.dir == 3){ // raboti
+            if(camera.x <= -5000 + canvas.width / 2 && player.dir == 3){
                 player.dir = 0;
                 camera.x = -5000 + canvas.width / 2;
             }
-            if(camera.x >= 10000 - canvas.width / 2 && player.dir == 4){ // ne raboti nz zashto
+            if(camera.x >= 5000 - canvas.width / 2 && player.dir == 4){
                 player.dir = 0;
-                camera.x = 10000 - canvas.width / 2;
+                camera.x = 5000 - canvas.width / 2;
             }
 
             for(let i = 0; i < 50; i++){
@@ -105,7 +98,7 @@ function update() {
                 }
             }
 
-            if(collectedRunes >= 50){
+            if(collectedRunes == 50){
                 game.victory = true;
             }
         }
@@ -133,6 +126,15 @@ function draw() {
         
         for(let i = 0; i < 50; i++){
             drawImage(rune, runes[i].x + canvas.width / 2 - camera.x, runes[i].y + canvas.height / 2 - camera.y, runes[i].size, runes[i].size);
+        }
+        for(let i = 0; i < 100; i++){
+            if(Math.atan2(Math.sin(Math.abs(player.y - enemies[i].y)), Math.cos(Math.abs(player.x - enemies[i].x))) < 0){
+                drawImage(skeletonRight[framesEnemies], enemies[i].x + canvas.width / 2 - camera.x,
+                          enemies[i].y + canvas.height / 2 - camera.y, enemies[i].width, enemies[i].height);
+            }else if(Math.atan2(Math.sin(Math.abs(player.y - enemies[i].y)), Math.cos(Math.abs(player.x - enemies[i].x))) > 0){
+                drawImage(skeletonLeft[framesEnemies], enemies[i].x + canvas.width / 2 - camera.x,
+                          enemies[i].y + canvas.height / 2 - camera.y, enemies[i].width, enemies[i].height);
+            }
         }
 
         if(player.dir == 0){
