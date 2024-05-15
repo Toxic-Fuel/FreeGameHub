@@ -17,8 +17,8 @@ function pathfind(x1, y1, x2, y2) {
 
 function init() {
     for(let i = 0; i < 50; i++){
-        runes.push(new Runes(Math.round(Math.random() * (10000 + canvas.width) - 5000 - canvas.width / 2),
-                             Math.round(Math.random() * (10000 + canvas.height) - 5000 - canvas.height / 2), 50));
+        runes.push(new Runes(Math.round(Math.random() * (10000 + canvas.width) - 5000),
+                                        Math.round(Math.random() * (10000 + canvas.height) - 5000), 50));
     }
 
     for(let i = 0; i < 10; i++){
@@ -68,66 +68,33 @@ function update() {
             if(isKeyPressed[87]){
                 player.dir = 1;
                 camera.y -= camera.speed;
-            }
-            if(isKeyPressed[83]){
+            }else if(isKeyPressed[83]){
                 player.dir = 2;
                 camera.y += camera.speed;
-            }
-            if(isKeyPressed[65]){
+            }else if(isKeyPressed[65]){
                 player.dir = 3;
                 camera.x -= camera.speed;
-            }
-            if(isKeyPressed[68]){
+            }else if(isKeyPressed[68]){
                 player.dir = 4;
                 camera.x += camera.speed;
             }
 
-            if(isKeyPressed[87] && isKeyPressed[83] && !isKeyPressed[65] && !isKeyPressed[68]){
+            // border
+            if(camera.y <= -5000 + canvas.height / 2 && player.dir == 1){ // raboti
                 player.dir = 0;
+                camera.y = -5000 + canvas.height / 2;
             }
-            if(isKeyPressed[65] && isKeyPressed[68] && !isKeyPressed[87] && !isKeyPressed[83]){
-                player.dir = 0;
-            }
-            
-            if(camera.y <= 0 + canvas.height / 2 && player.dir == 1){
-                player.dir = 0;
-                camera.y = 0 + canvas.height / 2
-                if(isKeyPressed[65]){
-                    player.dir = 3;
-                }
-                if(isKeyPressed[68]){
-                    player.dir = 4;
-                }
-            }
-            if(camera.y >= 10000 - canvas.height / 2 && player.dir == 2){
+            if(camera.y >= 10000 - canvas.height / 2 && player.dir == 2){ // ne raboti nz zashto
                 player.dir = 0;
                 camera.y = 10000 - canvas.height / 2;
-                if(isKeyPressed[65]){
-                    player.dir = 3;
-                }
-                if(isKeyPressed[68]){
-                    player.dir = 4;
-                }
             }
-            if(camera.x <= -5000 + canvas.width / 2 && player.dir == 3){
+            if(camera.x <= -5000 + canvas.width / 2 && player.dir == 3){ // raboti
                 player.dir = 0;
                 camera.x = -5000 + canvas.width / 2;
-                if(isKeyPressed[87]){
-                    player.dir = 1;
-                }
-                if(isKeyPressed[83]){
-                    player.dir = 2;
-                }
             }
-            if(camera.x >= 10000 - canvas.width / 2 && player.dir == 4){
+            if(camera.x >= 10000 - canvas.width / 2 && player.dir == 4){ // ne raboti nz zashto
                 player.dir = 0;
                 camera.x = 10000 - canvas.width / 2;
-                if(isKeyPressed[87]){
-                    player.dir = 1;
-                }
-                if(isKeyPressed[83]){
-                    player.dir = 2;
-                }
             }
 
             for(let i = 0; i < 50; i++){
