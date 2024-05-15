@@ -9,6 +9,34 @@
             padding: 0;
             overflow: hidden;
         }
+
+        img {
+            user-select: none;
+            position: absolute;
+            right: 180px;
+        }
+
+        .button {
+            user-select: none;
+            position: absolute;
+            top: 650px;
+            right: 20px;
+            padding: 10px 20px;
+            border-style: solid;
+            border-color: #010103;
+            background-color: #7A2048;
+            color: #010103;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 25px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.4s;
+        }
+
+        .button:hover {
+            background-color: rebeccapurple;
+        }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta charset="UTF-8">
@@ -16,8 +44,8 @@
 </head>
 
 <body onload="onBodyLoad()">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaT22hej5Yc6wFsHUirBwldW7ZenjeiYhSkRjPHMPcbg&s"
-        style="position: absolute; right:180px ;">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaT22hej5Yc6wFsHUirBwldW7ZenjeiYhSkRjPHMPcbg&s">
+    <a href="../../Yordan/MainPage.html" class="button">Back to main menu</a>
     <canvas id="canvas-id" width="1600" height="800">
         <script>
 

@@ -18,11 +18,14 @@ function draw() {
 	context.fillRect(0, 0, 720, 760);
 	context.fillStyle = "#FBEAEB";
 	context.fillRect(720, 120, 820, 640);
-	context.fillStyle = "black";
-	context.fillRect(750, 145, 45, 40);
-	context.fillStyle = "white";
-	context.font = "40px Arial";
-	context.fillText(jivoti, 750, 180);
+	context.fillStyle = "#7A2048";
+	context.strokeStyle = "#010103";
+	context.lineWidth = 1.5;
+	context.fillRect(740, 135, 60, 45);
+	context.strokeRect(740, 135, 60, 45);
+	context.fillStyle = "#010103";
+	context.font = "45px Gothic";
+	context.fillText(jivoti, 747, 175);
 	for (let i = 0; i < sizeX; i++) {
 		for (let j = 0; j < sizeY; j++) {
 			context.fillStyle = colors[gridColors[i][j]];
