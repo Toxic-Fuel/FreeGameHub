@@ -1,0 +1,68 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #890499;
+}
+
+body,
+canvas {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.container {
+    width: 50%;
+    margin: 100px auto;
+    text-align: center;
+}
+
+h1 {
+    font-size: 50px;
+    color: #010103;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-style: solid;
+    border-color: #010103;
+    background-color: rebeccapurple;
+    color: #010103;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 25px;
+    margin: 10px;
+    cursor: pointer;
+    transition: background-color 0.4s;
+}
+
+.button:hover {
+    background-color: #400040;
+}
+
+.instructions {
+    margin-top: 50px;
+    text-align: left;
+}
+
+.instructions h2 {
+    font-size: 35px;
+    color: #010103;
+}
+
+p {
+    font-size: 25px;
+    color: #010103;
+}
+
+.aim-description {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.aim-description h2 {
+    font-size: 35px;
+    color: #010103;
+}
