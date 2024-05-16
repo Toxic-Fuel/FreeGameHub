@@ -18,7 +18,7 @@ function draw() {
 	context.fillRect(0, 0, 720, 760);
 	context.fillStyle = "#FBEAEB";
 	context.fillRect(720, 120, 820, 640);
-	context.fillStyle = "#7A2048";
+	context.fillStyle = "#87004d";
 	context.strokeStyle = "#010103";
 	context.lineWidth = 1.5;
 	context.fillRect(740, 135, 60, 45);
