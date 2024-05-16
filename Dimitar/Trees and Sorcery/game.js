@@ -1,21 +1,22 @@
-let player = {x: 0, y: 0, width: 55, height: 110, dir: 0};
-let boss = {x: 0, y: 0, width: 100, height: 150};
-let camera = {x: 0, y: 0, speed: 4}, game = {victory: false, loss: false, pause: false, start: true};
+let player = { x: 0, y: 0, width: 55, height: 110, dir: 0 };
+let boss = { x: 0, y: 0, width: 100, height: 150 };
+let camera = { x: 0, y: 0, speed: 4 }, game = { victory: false, loss: false, pause: false, start: true };
 let updates = 0, timeLeft = 500;
 let runes = [], enemies = [], collectedRunes = 0, framesPlayer = 0, framesEnemies = 0;
+let distanceX = [], distanceY = [], angle = [];
 // const gameplayBGMusic = new Audio('./music/Loops/Drum Only Loops/Ove Melaa - DrumLoop 1.mp3');
 // const winBGMusic = new Audio('./music/FullScores/Orchestral Scores/Ove Melaa - Heaven Sings.mp3');
 // const lossBGMusic = new Audio('./music/FullScores/Orchestral SCores/Ove Melaa - Times.mp3');
 
 function init() {
-    for(let i = 0; i < 50; i++){
+    for (let i = 0; i < 50; i++) {
         runes.push(new Runes(Math.round(Math.random() * (10000 + canvas.width) - 5000),
-                                        Math.round(Math.random() * (10000 + canvas.height) - 5000), 50));
+            Math.round(Math.random() * (10000 + canvas.height) - 5000), 50));
     }
 
-    for(let i = 0; i < 100; i++){
-       enemies.push(new Enemies(Math.round(Math.random() * 10000 - 5000 - canvas.width / 2),
-                                Math.round(Math.random() * 10000 - 5000 - canvas.height / 2), 100, 25));
+    for (let i = 0; i < 100; i++) {
+        enemies.push(new Enemies(Math.round(Math.random() * 10000 - 5000 - canvas.width / 2),
+            Math.round(Math.random() * 10000 - 5000 - canvas.height / 2), 100, 25));
     }
 }
 
@@ -26,83 +27,85 @@ function update() {
     //     startBGMusic.pause();
     // }
 
-    if(game.start && !game.loss && !game.victory){
+    if (game.start && !game.loss && !game.victory) {
         updates++;
-        if(!game.pause){
+        if (!game.pause) {
             // gameplayBGMusic.play();
 
             player.dir = 0;
-
-           for(let i = 0; i < 100; i++){
-                enemies[i].x += Math.atan2(Math.sin(Math.abs(player.y - enemies[i].y)), Math.cos(Math.abs(player.x - enemies[i].x))) * 5;
-                enemies[i].y += Math.atan2(Math.sin(Math.abs(player.y - enemies[i].y)), Math.cos(Math.abs(player.x - enemies[i].x))) * 5;
+            for (let i = 0; i < 100; i++) {
+                distanceY[i] = camera.y - enemies[i].y;
+                distanceX[i] = camera.x - enemies[i].x;
+                angle[i] = Math.atan2(distanceY[i], distanceX[i]);
+                enemies[i].x += Math.cos(angle[i]);
+                enemies[i].y += Math.sin(angle[i]);
             }
 
-            if(updates % 10 == 0){
+            if (updates % 10 == 0) {
                 framesPlayer++;
             }
-            if(framesPlayer == 3){
+            if (framesPlayer == 3) {
                 framesPlayer = 0;
             }
 
-            if(updates % 100 == 0){
+            if (updates % 100 == 0) {
                 timeLeft--;
             }
-            if(timeLeft <= 0){
+            if (timeLeft <= 0) {
                 game.loss = true;
             }
-            if(updates % 20 == 0){
+            if (updates % 20 == 0) {
                 framesEnemies++;
             }
-            if(framesEnemies >= 7){
+            if (framesEnemies >= 7) {
                 framesEnemies = 0;
             }
-            
-            if(isKeyPressed[87]){
+
+            if (isKeyPressed[87]) {
                 player.dir = 1;
                 camera.y -= camera.speed;
-            }else if(isKeyPressed[83]){
+            } else if (isKeyPressed[83]) {
                 player.dir = 2;
                 camera.y += camera.speed;
-            }else if(isKeyPressed[65]){
+            } else if (isKeyPressed[65]) {
                 player.dir = 3;
                 camera.x -= camera.speed;
-            }else if(isKeyPressed[68]){
+            } else if (isKeyPressed[68]) {
                 player.dir = 4;
                 camera.x += camera.speed;
             }
 
             // border
-            if(camera.y <= -5000 + canvas.height / 2 && player.dir == 1){
+            if (camera.y <= -5000 + canvas.height / 2 && player.dir == 1) {
                 player.dir = 0;
                 camera.y = -5000 + canvas.height / 2;
             }
-            if(camera.y >= 5000 - canvas.height / 2 && player.dir == 2){
+            if (camera.y >= 5000 - canvas.height / 2 && player.dir == 2) {
                 player.dir = 0;
                 camera.y = 5000 - canvas.height / 2;
             }
-            if(camera.x <= -5000 + canvas.width / 2 && player.dir == 3){
+            if (camera.x <= -5000 + canvas.width / 2 && player.dir == 3) {
                 player.dir = 0;
                 camera.x = -5000 + canvas.width / 2;
             }
-            if(camera.x >= 5000 - canvas.width / 2 && player.dir == 4){
+            if (camera.x >= 5000 - canvas.width / 2 && player.dir == 4) {
                 player.dir = 0;
                 camera.x = 5000 - canvas.width / 2;
             }
 
-            for(let i = 0; i < 50; i++){
-                if(areColliding(camera.x, camera.y, player.width, player.height, runes[i].x, runes[i].y, runes[i].size, runes[i].size)){
+            for (let i = 0; i < 50; i++) {
+                if (areColliding(camera.x, camera.y, player.width, player.height, runes[i].x, runes[i].y, runes[i].size, runes[i].size)) {
                     runes[i].x = NaN;
                     collectedRunes++;
                     // coinCollect.play();
                 }
             }
 
-            if(collectedRunes == 50){
+            if (collectedRunes == 50) {
                 game.victory = true;
             }
         }
-    }else{
+    } else {
         // gameplayBGMusic.pause();
         collectedRunes = 0;
     }
@@ -121,35 +124,35 @@ function update() {
 }
 
 function draw() {
-    if(!game.loss && !game.victory && game.start){
-        drawImage(backDarkForest, -5000  + canvas.width / 2 - camera.x, -5000 + canvas.height / 2 - camera.y, 10000, 10000);
-        
-        for(let i = 0; i < 50; i++){
+    if (!game.loss && !game.victory && game.start) {
+        drawImage(backDarkForest, -5000 + canvas.width / 2 - camera.x, -5000 + canvas.height / 2 - camera.y, 10000, 10000);
+
+        for (let i = 0; i < 50; i++) {
             drawImage(rune, runes[i].x + canvas.width / 2 - camera.x, runes[i].y + canvas.height / 2 - camera.y, runes[i].size, runes[i].size);
         }
-        for(let i = 0; i < 100; i++){
-            if(Math.atan2(Math.sin(Math.abs(player.y - enemies[i].y)), Math.cos(Math.abs(player.x - enemies[i].x))) < 0){
+        for (let i = 0; i < 100; i++) {
+            if (Math.atan2(Math.sin(Math.abs(player.y - enemies[i].y)), Math.cos(Math.abs(player.x - enemies[i].x))) < 0) {
                 drawImage(skeletonRight[framesEnemies], enemies[i].x + canvas.width / 2 - camera.x,
-                          enemies[i].y + canvas.height / 2 - camera.y, enemies[i].width, enemies[i].height);
-            }else if(Math.atan2(Math.sin(Math.abs(player.y - enemies[i].y)), Math.cos(Math.abs(player.x - enemies[i].x))) > 0){
+                    enemies[i].y + canvas.height / 2 - camera.y, enemies[i].width, enemies[i].height);
+            } else if (Math.atan2(Math.sin(Math.abs(player.y - enemies[i].y)), Math.cos(Math.abs(player.x - enemies[i].x))) > 0) {
                 drawImage(skeletonLeft[framesEnemies], enemies[i].x + canvas.width / 2 - camera.x,
-                          enemies[i].y + canvas.height / 2 - camera.y, enemies[i].width, enemies[i].height);
+                    enemies[i].y + canvas.height / 2 - camera.y, enemies[i].width, enemies[i].height);
             }
         }
 
-        if(player.dir == 0){
+        if (player.dir == 0) {
             drawImage(monkeyIdle[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
-        if(player.dir == 1){
+        if (player.dir == 1) {
             drawImage(monkeyUp[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
-        if(player.dir == 2){
+        if (player.dir == 2) {
             drawImage(monkeyDown[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
-        if(player.dir == 3){
+        if (player.dir == 3) {
             drawImage(monkeyLeft[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
-        if(player.dir == 4){
+        if (player.dir == 4) {
             drawImage(monkeyRight[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
 
@@ -161,13 +164,13 @@ function draw() {
         context.font = '50px MS PGothic';
         context.fillText(`Time: ${timeLeft}`, canvas.width - 225, 0);
 
-        if(game.pause){
+        if (game.pause) {
             context.fillStyle = '#FFFFFF';
             context.globalAlpha = 0.3;
             context.fillRect(0, 0, canvas.width, canvas.height);
 
             context.fillStyle = '#FFD100';
-            
+
             context.globalAlpha = 1;
             context.font = '150px MS PGothic';
             context.fillText('PAUSE', canvas.width / 2 - 250, 50);
@@ -176,20 +179,20 @@ function draw() {
         }
     }
 
-    if(game.victory){
+    if (game.victory) {
         context.fillStyle = '#000000';
         context.fillRect(0, 0, canvas.width, canvas.height);
 
         context.fillStyle = '#FFC300';
         context.font = '150px MS PGothic';
         context.fillText('YOU WIN', 425, player.height);
-        
+
         context.fillStyle = '#FF5733';
         context.font = '50px MS PGothic';
         context.fillText('Press "Enter" to restart.', 465, 350);
     }
 
-    if(game.loss){
+    if (game.loss) {
         context.fillStyle = '#000000';
         context.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -204,13 +207,13 @@ function draw() {
 }
 
 function keydown(key) {
-    if(key == 27 && !game.pause){
+    if (key == 27 && !game.pause) {
         game.pause = true;
-    }else if(key == 27 && game.pause){
+    } else if (key == 27 && game.pause) {
         game.pause = false;
     }
 
-    if(key == 13 && game.victory || game.loss){
+    if (key == 13 && game.victory || game.loss) {
         game.victory = false;
         game.loss = false;
         game.start = true;
