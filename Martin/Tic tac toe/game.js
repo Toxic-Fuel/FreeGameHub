@@ -41,6 +41,45 @@ function draw() {
     }
 }
 
+function checkWin() {
+    for (let y = 0; y < 3; y++) {
+        let rowCheck = [0, 0, 0];
+        for (let x = 0; x < 3; x++) {
+            rowCheck[currCell[x][y]]++;
+        }
+
+        if (rowCheck[1] == 3 || rowCheck[2] == 3) {
+            winner = true;
+            return true;
+        }
+    }
+
+    for (let x = 0; x < 3; x++) {
+        let colCheck = [0, 0, 0];
+        for (let y = 0; y < 3; y++) {
+            colCheck[currCell[x][y]]++;
+        }
+        if (colCheck[1] == 3 || colCheck[2] == 3) {
+            winner = true;
+            return true;
+        }
+    }
+
+    if ((currCell[1][1] != 0 && currCell[0][0] == currCell[1][1] && currCell[1][1] == currCell[2][2]) ||
+        (currCell[1][1] != 0 && currCell[0][2] == currCell[1][1] && currCell[1][1] == currCell[2][0])) {
+        winner = true;
+        return true;
+    }
+
+    tie = true;
+    for (let x = 0; x < 3; x++) {
+        for (let y = 0; y < 3; y++) {
+            if (currCell[x][y] == 0) {
+                tie = false;
+            }
+        }
+    }
+}
 
 function mouseup() {
     if (winner) {
@@ -52,7 +91,8 @@ function mouseup() {
 
     if (currCell[gridX][gridY] == 0) {
         currCell[gridX][gridY] = currPlayer;
-
+        if (checkWin())
+            return;
         if (currPlayer == 1) {
             currPlayer = 2;
         } else {
