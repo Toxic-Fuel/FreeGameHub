@@ -1,4 +1,4 @@
-const padding = 10;
+const padding = 30;
 const size = (600 - 2 * padding) / 3;
 
 let playerColors = ['black', 'green', 'magenta'];
@@ -15,12 +15,13 @@ for (let x = 0; x < 3; x++) {
 }
 function draw() {
     context.fillStyle = "black";
-    context.fillRect(0, 0, 800, 600);
+    context.fillRect(0, 0, canvas.width, canvas.height);
 
     context.strokeStyle = "white";
     for (let x = 0; x < 3; x++) {
         for (let y = 0; y < 3; y++) {
             context.fillStyle = playerColors[currCell[x][y]];
+            context.strokeStyle = "red";
             context.fillRect(x * size + padding, y * size + padding,
                 size, size);
             context.strokeRect(x * size + padding, y * size + padding,

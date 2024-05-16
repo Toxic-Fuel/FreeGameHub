@@ -10,9 +10,18 @@
             overflow: hidden;
         }
 
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
         img {
-            user-select: none;
+            margin: 0;
+            padding: 0;
             position: absolute;
+            user-select: none;
             right: 180px;
         }
 
@@ -41,7 +50,7 @@
 <body onload="onBodyLoad()">
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaT22hej5Yc6wFsHUirBwldW7ZenjeiYhSkRjPHMPcbg&s">
     <a href="../../Yordan/MainPage.html" class="button">Back to main menu</a>
-    <canvas id="canvas-id" width="1600" height="800">
+    <canvas id="canvas-id">
         <script>
 
             // More global variables
@@ -75,8 +84,12 @@
                 // Change canvas.width and .height on browser resize
 
                 // Default canvas size
-                canvas.width = 1600;
-                canvas.height = 800;
+                window.onresize = function () {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                };
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
 
                 // Get 2d context
                 context = canvas.getContext("2d");
