@@ -101,7 +101,14 @@ function playBot() {
             Check[currCell[x][y]]++;
         }
 
-        if (Check[1] == 2 && notPlayer != -1) {
+        if (Check[2] == 2 && notPlayer != -1 && currPlayer == 2) {
+            playX = notPlayer;
+            playY = y;
+            currCell[playX][playY] = currPlayer;
+            return;
+        }
+
+        if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2) {
             playX = notPlayer;
             playY = y;
             currCell[playX][playY] = currPlayer;
@@ -118,7 +125,14 @@ function playBot() {
             Check[currCell[x][y]]++;
         }
 
-        if (Check[1] == 2 && notPlayer != -1) {
+        if (Check[2] == 2 && notPlayer != -1 && currPlayer == 2) {
+            playX = x;
+            playY = notPlayer;
+            currCell[playX][playY] = currPlayer;
+            return;
+        }
+
+        if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2) {
             playX = x;
             playY = notPlayer;
             currCell[playX][playY] = currPlayer;
@@ -133,7 +147,14 @@ function playBot() {
             notPlayer = i;
     }
 
-    if (Check[1] == 2 && notPlayer != -1) {
+    if (Check[2] == 2 && notPlayer != -1 && currPlayer == 2) {
+        playX = notPlayer;
+        playY = notPlayer;
+        currCell[playX][playY] = currPlayer;
+        return;
+    }
+
+    if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2) {
         playX = notPlayer;
         playY = notPlayer;
         currCell[playX][playY] = currPlayer;
@@ -147,7 +168,14 @@ function playBot() {
             notPlayer = i;
     }
 
-    if (Check[1] == 2 && notPlayer != -1) {
+    if (Check[2] == 2 && notPlayer != -1 && currPlayer == 2) {
+        playX = notPlayer;
+        playY = 2 - notPlayer;
+        currCell[playX][playY] = currPlayer;
+        return;
+    }
+
+    if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2) {
         playX = notPlayer;
         playY = 2 - notPlayer;
         currCell[playX][playY] = currPlayer;
