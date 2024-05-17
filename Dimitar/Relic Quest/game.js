@@ -1,9 +1,10 @@
 let player = { x: 0, y: 0, width: 55, height: 110, dir: 0 };
+let frames = {player: 0, enemies: 0, death: 0};
 let boss = { x: 0, y: 0, width: 100, height: 150 };
 let camera = { x: 0, y: 0, speed: 4 }, game = { victory: false, loss: false, pause: false, start: true };
-let updates = 0, timeLeft = 500;
-let runes = [], enemies = [], collectedRunes = 0, framesPlayer = 0, framesEnemies = 0;
-let distanceX = [], distanceY = [], angle = [];
+let updates = 0, timeLeft = 250, collectedRunes = 0;
+let runes = [], enemies = [], distanceX = [], distanceY = [], angle = [];
+let deathAnimation = false;
 // const gameplayBGMusic = new Audio('./music/Loops/Drum Only Loops/Ove Melaa - DrumLoop 1.mp3');
 // const winBGMusic = new Audio('./music/FullScores/Orchestral Scores/Ove Melaa - Heaven Sings.mp3');
 // const lossBGMusic = new Audio('./music/FullScores/Orchestral SCores/Ove Melaa - Times.mp3');
@@ -39,10 +40,10 @@ function update() {
 
             //animation player
             if (updates % 10 == 0) {
-                framesPlayer++;
+                frames.player++;
             }
-            if (framesPlayer == 3) {
-                framesPlayer = 0;
+            if (frames.player == 3) {
+                frames.player = 0;
             }
 
             //timer
@@ -53,12 +54,20 @@ function update() {
                 game.loss = true;
             }
 
-            // animations enemies
+            //animations enemies
             if (updates % 10 == 0) {
-                framesEnemies++;
+                frames.enemies++;
             }
-            if (framesEnemies >= 7) {
-                framesEnemies = 0;
+            if (frames.enemies >= 7) {
+                frames.enemies = 0;
+            }
+
+            //anmimation enemies death
+            if(updates % 10 == 0){
+                frames.death++;
+            }
+            if(frames.death > 4){
+                frames.death = NaN;
             }
 
             //movement
@@ -76,7 +85,7 @@ function update() {
                 camera.x += camera.speed;
             }
 
-            // border
+            //border
             if (camera.y <= -5000 + canvas.height / 2 && player.dir == 1) {
                 player.dir = 0;
                 camera.y = -5000 + canvas.height / 2;
@@ -94,13 +103,12 @@ function update() {
                 camera.x = 5000 - canvas.width / 2;
             }
 
+            //collecting runes
             for (let i = 0; i < 50; i++) {
-                if (areColliding(camera.x, camera.y, player.width, player.height, runes[i].x, runes[i].y, runes[i].size, runes[i].size)) {
-                    runes[i].x = NaN;
-                    collectedRunes++;
-                }
+                runes[i].collide(camera.x, camera.y,  player.width, player.height, collectedRunes);
             }
-
+            
+            //game win
             if (collectedRunes == 50) {
                 game.victory = true;
             }
@@ -132,28 +140,34 @@ function draw() {
         }
         for (let i = 0; i < 10; i++) {
             if (enemies[i].x >= camera.x) {
-                drawImage(skeletonRight[framesEnemies], enemies[i].x + canvas.width / 2 - camera.x,
+                drawImage(skeletonRight[frames.enemies], enemies[i].x + canvas.width / 2 - camera.x,
                     enemies[i].y + canvas.height / 2 - camera.y, enemies[i].width, enemies[i].height);
             } else if (enemies[i].x <= camera.x) {
-                drawImage(skeletonLeft[framesEnemies], enemies[i].x + canvas.width / 2 - camera.x,
+                drawImage(skeletonLeft[frames.enemies], enemies[i].x + canvas.width / 2 - camera.x,
                     enemies[i].y + canvas.height / 2 - camera.y, enemies[i].width, enemies[i].height);
             }
         }
 
         if (player.dir == 0) {
-            drawImage(monkeyIdle[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
+            drawImage(monkeyIdle[frames.player], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
         if (player.dir == 1) {
-            drawImage(monkeyUp[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
+            drawImage(monkeyUp[frames.player], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
         if (player.dir == 2) {
-            drawImage(monkeyDown[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
+            drawImage(monkeyDown[frames.player], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
         if (player.dir == 3) {
-            drawImage(monkeyLeft[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
+            drawImage(monkeyLeft[frames.player], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
         if (player.dir == 4) {
-            drawImage(monkeyRight[framesPlayer], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
+            drawImage(monkeyRight[frames.player], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
+        }
+
+        for(let i = 0 ; i < 10; i++){
+            if(deathAnimation){
+                drawImage(enemyDeath[frames.death], enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height);
+            }
         }
 
         context.fillStyle = '#FFC300';
@@ -218,5 +232,11 @@ function keydown(key) {
         game.loss = false;
         game.start = true;
         timeLeft = 500;
+    }
+}
+
+function mouseup() {
+    for (let i = 0; i < 10; i++) {
+        enemies[i].collide(camera.x, camera.y, player.width, player.height);
     }
 }
