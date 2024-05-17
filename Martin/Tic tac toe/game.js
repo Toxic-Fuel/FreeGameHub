@@ -1,5 +1,6 @@
 const padding = 30;
 const size = (600 - 2 * padding) / 3;
+const changeText = document.querySelector("#playVSbot");
 
 let playerColors = ['black', '	#8CC653', '	#8C1AFF'];
 let currCell = [];
@@ -8,15 +9,37 @@ let winner = false;
 let tie = false;
 let playVSbot = false;
 
-document.getElementById('playVSbot').addEventListener('click', function () {
-    playVSbot = true;
-});
 for (let x = 0; x < 3; x++) {
     currCell[x] = [];
     for (let y = 0; y < 3; y++) {
         currCell[x][y] = 0;
     }
 }
+document.getElementById('playVSbot').addEventListener('click', function () {
+    if (!playVSbot) {
+        winner = false;
+        tie = false;
+        currPlayer = 1;
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                currCell[x][y] = 0;
+            }
+        }
+        playVSbot = true;
+        changeText.textContent = "Play Tic Tac Toe vs friend";
+    } else {
+        winner = false;
+        tie = false;
+        currPlayer = 1;
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                currCell[x][y] = 0;
+            }
+        }
+        playVSbot = false;
+        changeText.textContent = "Play Tic Tac Toe vs bot";
+    }
+});
 function draw() {
     context.fillStyle = "rebeccapurple";
     context.fillRect(0, 0, canvas.width, canvas.height);
