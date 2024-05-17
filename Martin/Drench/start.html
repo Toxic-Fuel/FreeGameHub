@@ -57,7 +57,9 @@
             let canvas, context;
 
             // Access to functions, created in game.js
-            var draw, mouseup, init;
+            var draw, mouseup;
+
+            let mouseX, mouseY;
 
             const reqAnimationFrame = window.requestAnimationFrame;
 
@@ -72,8 +74,8 @@
 
             function updateMousePosition(mouse) {
                 let boundingRect = canvas.getBoundingClientRect();
-                mouseX = mouse.pageX - boundingRect.x;
-                mouseY = mouse.pageY - boundingRect.y;
+                let mouseX = mouse.pageX - boundingRect.x;
+                let mouseY = mouse.pageY - boundingRect.y;
             }
 
 
