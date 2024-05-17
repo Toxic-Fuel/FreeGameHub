@@ -19,7 +19,7 @@
         .button {
             user-select: none;
             position: absolute;
-            top: 650px;
+            top: 680px;
             right: 20px;
             padding: 10px 20px;
             border-style: solid;
@@ -28,6 +28,26 @@
             color: #010103;
             text-decoration: none;
             border-radius: 5px;
+            font-size: 25px;
+            font-family: 'Gothic';
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        #playVSbot {
+            user-select: none;
+            position: absolute;
+            top: 680px;
+            right: 300px;
+            padding: 10px 20px;
+            border: 3px;
+            border-style: solid;
+            border-color: #010103;
+            background-color: #87004d;
+            color: #010103;
+            text-decoration: none;
+            border-radius: 5px;
+            font-family: 'Gothic';
             font-size: 25px;
             margin: 10px;
             cursor: pointer;
@@ -40,6 +60,7 @@
 
 <body onload="onBodyLoad()">
     <a href="../../Yordan/MainPage.html" class="button">Back to main menu</a>
+    <button id="playVSbot">Play Tic Tac Toe vs bot</button>
     <canvas id="canvas-id">
         <script>
 

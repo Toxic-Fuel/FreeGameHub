@@ -6,7 +6,11 @@ let currCell = [];
 let currPlayer = 1;
 let winner = false;
 let tie = false;
+let playVSbot = false;
 
+document.getElementById('playVSbot').addEventListener('click', function () {
+    playVSbot = true;
+});
 for (let x = 0; x < 3; x++) {
     currCell[x] = [];
     for (let y = 0; y < 3; y++) {
@@ -89,7 +93,7 @@ function mouseup() {
     let gridX = Math.floor((mouseX - padding - 450) / size);
     let gridY = Math.floor((mouseY - padding - 75) / size);
 
-    if (currCell[gridX][gridY] == 0) {
+    if (gridX < 3 && gridY < 3 && gridX >= 0 && gridY >= 0 && currCell[gridX][gridY] == 0) {
         currCell[gridX][gridY] = currPlayer;
         if (checkWin())
             return;
