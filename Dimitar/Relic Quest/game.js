@@ -16,7 +16,7 @@ function init() {
 
     for (let i = 0; i < 100; i++) {
         enemies.push(new Enemies(Math.round(Math.random() * 10000 - 5000 - canvas.width / 2),
-            Math.round(Math.random() * 10000 - 5000 - canvas.height / 2), 100, 25));
+            Math.round(Math.random() * 10000 - 5000 - canvas.height / 2), 75, 100));
     }
 }
 
@@ -34,13 +34,10 @@ function update() {
 
             player.dir = 0;
             for (let i = 0; i < 100; i++) {
-                distanceY[i] = camera.y - enemies[i].y;
-                distanceX[i] = camera.x - enemies[i].x;
-                angle[i] = Math.atan2(distanceY[i], distanceX[i]);
-                enemies[i].x += Math.cos(angle[i]);
-                enemies[i].y += Math.sin(angle[i]);
+                enemies[i].pathfind(camera.x, camera.y, 3);
             }
 
+            //animation player
             if (updates % 10 == 0) {
                 framesPlayer++;
             }
@@ -48,19 +45,23 @@ function update() {
                 framesPlayer = 0;
             }
 
+            //timer
             if (updates % 100 == 0) {
                 timeLeft--;
             }
             if (timeLeft <= 0) {
                 game.loss = true;
             }
-            if (updates % 20 == 0) {
+
+            // animations enemies
+            if (updates % 10 == 0) {
                 framesEnemies++;
             }
             if (framesEnemies >= 7) {
                 framesEnemies = 0;
             }
 
+            //movement
             if (isKeyPressed[87]) {
                 player.dir = 1;
                 camera.y -= camera.speed;
@@ -97,7 +98,6 @@ function update() {
                 if (areColliding(camera.x, camera.y, player.width, player.height, runes[i].x, runes[i].y, runes[i].size, runes[i].size)) {
                     runes[i].x = NaN;
                     collectedRunes++;
-                    // coinCollect.play();
                 }
             }
 
@@ -130,11 +130,11 @@ function draw() {
         for (let i = 0; i < 50; i++) {
             drawImage(rune, runes[i].x + canvas.width / 2 - camera.x, runes[i].y + canvas.height / 2 - camera.y, runes[i].size, runes[i].size);
         }
-        for (let i = 0; i < 100; i++) {
-            if (Math.atan2(Math.sin(Math.abs(player.y - enemies[i].y)), Math.cos(Math.abs(player.x - enemies[i].x))) < 0) {
+        for (let i = 0; i < 10; i++) {
+            if (enemies[i].x >= camera.x) {
                 drawImage(skeletonRight[framesEnemies], enemies[i].x + canvas.width / 2 - camera.x,
                     enemies[i].y + canvas.height / 2 - camera.y, enemies[i].width, enemies[i].height);
-            } else if (Math.atan2(Math.sin(Math.abs(player.y - enemies[i].y)), Math.cos(Math.abs(player.x - enemies[i].x))) > 0) {
+            } else if (enemies[i].x <= camera.x) {
                 drawImage(skeletonLeft[framesEnemies], enemies[i].x + canvas.width / 2 - camera.x,
                     enemies[i].y + canvas.height / 2 - camera.y, enemies[i].width, enemies[i].height);
             }

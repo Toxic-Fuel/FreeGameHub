@@ -14,8 +14,11 @@ class Enemies{
         this.height = height;
     }
     
-    pathfind(playerX, playerY, enemyX, enemyY){
-        enemyX += Math.cos(Math.atan2(Math.abs(playerY - enemyY), Math.abs(playerX - enemyX)));
-        enemyY += Math.sin(Math.atan2(Math.abs(playerY - enemyY), Math.abs(playerX - enemyX)));
+    pathfind(playerX, playerY, speed){
+        distanceY = playerY - this.y;
+        distanceX = playerX - this.x;
+        angle = Math.atan2(distanceY, distanceX);
+        this.x += Math.cos(angle) * speed;
+        this.y += Math.sin(angle) * speed;
     }
 }
