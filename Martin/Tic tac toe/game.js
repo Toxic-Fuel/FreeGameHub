@@ -56,7 +56,7 @@ function draw() {
     }
 
     context.fillStyle = playerColors[currPlayer];
-    context.font = "35px Arial";
+    context.font = "35px Gothhic";
 
     if (winner) {
         context.fillText("Player " + currPlayer + " wins!", 1050, 200);
@@ -67,7 +67,77 @@ function draw() {
         context.fillText("Player " + currPlayer + " plays", 1050, 200);
     }
 }
+function playBot() {
+    let playX, playY;
+    do {
+        playX = randomInteger(3);
+        playY = randomInteger(3);
+    } while (currCell[playX][playY] == 1);
 
+    for (let y = 0; y < 3; y++) {
+        let rowCheck = [0, 0, 0];
+        let notPlayer = -1;
+        for (let x = 0; x < 3; x++) {
+            if (currCell[x][y] == 0)
+                notPlayer = x;
+            rowCheck[currCell[x][y]]++;
+        }
+
+        if (rowCheck[1] == 2 && notPlayer != -1) {
+            playX = notPlayer;
+            playY = y;
+            currCell[playX][playY] = currPlayer;
+            return;
+        }
+    }
+
+    for (let x = 0; x < 3; x++) {
+        let colCheck = [0, 0, 0];
+        let notPlayer = -1;
+        for (let y = 0; y < 3; y++) {
+            if (currCell[x][y] == 0)
+                notPlayer = y;
+            colCheck[currCell[x][y]]++;
+        }
+
+        if (colCheck[1] == 2 && notPlayer != -1) {
+            playX = x;
+            playY = notPlayer;
+            currCell[playX][playY] = currPlayer;
+            return;
+        }
+    }
+
+    let leftDiagonalCheck = [0, 0, 0];
+    for (let i = 0; i < 3; i++) {
+        leftDiagonalCheck[currCell[i][i]]++;
+        if (currCell[i][i] == 0)
+            notPlayer = i;
+    }
+
+    if (leftDiagonalCheck[1] == 2 && notPlayer != -1) {
+        playX = notPlayer;
+        playY = notPlayer;
+        currCell[playX][playY] = currPlayer;
+        return;
+    }
+
+    rightDigonalCheck = [0, 0, 0];
+    for (let i = 0; i < 3; i++) {
+        rightDigonalCheck[currCell[i][2 - i]]++;
+        if (currCell[i][2 - i] == 0)
+            notPlayer = i;
+    }
+
+    if (rightDigonalCheck[1] == 2 && notPlayer != -1) {
+        playX = notPlayer;
+        playY = 2 - notPlayer;
+        currCell[playX][playY] = currPlayer;
+        return;
+    }
+
+    currCell[playX][playY] = currPlayer;
+}
 function checkWin() {
     for (let y = 0; y < 3; y++) {
         let rowCheck = [0, 0, 0];
@@ -120,6 +190,17 @@ function mouseup() {
         currCell[gridX][gridY] = currPlayer;
         if (checkWin())
             return;
+        if (currPlayer == 1) {
+            currPlayer = 2;
+        } else {
+            currPlayer = 1;
+        }
+    }
+    if (playVSbot) {
+        playBot();
+        if (checkWin())
+            return;
+
         if (currPlayer == 1) {
             currPlayer = 2;
         } else {
