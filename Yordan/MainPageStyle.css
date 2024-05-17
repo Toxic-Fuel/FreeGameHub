@@ -98,7 +98,7 @@ flex-wrap: wrap;
 }
 div.IconImg {
     text-align: center;
-    width: calc(33.33% - 10px);
+    width: calc(25% - 10px);
     height: 120%;
     
     box-sizing: border-box;

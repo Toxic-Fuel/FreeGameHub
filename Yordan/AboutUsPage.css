@@ -33,6 +33,14 @@ div.Images {
     
     
 }
+img.logo {
+    width: 100%;
+    min-height: 100%;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    display: block;
+}
 div.Profile {
     flex: 0;
     display: flex;
