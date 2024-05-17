@@ -95,8 +95,8 @@ function playBot() {
     }
     if (startingCheck[1] == 1) {
         do {
-            playX = randomInteger(3);
-            playY = randomInteger(3);
+            playX = 1;
+            playY = 1;
         }
         while (currCell[playX][playY] == 1)
         console.log("starting move");
@@ -179,6 +179,7 @@ function playBot() {
     }
 
     let Check = [0, 0, 0];
+    let notPlayer = -1;
     for (let i = 0; i < 3; i++) {
         Check[currCell[i][i]]++;
         if (currCell[i][i] == 0) {
@@ -194,7 +195,7 @@ function playBot() {
         return;
     }
 
-    if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2 && Check[2] == 0) {
+    if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2) {
         playX = notPlayer;
         playY = notPlayer;
         console.log("left diagonal - player winning but blocked from bot");
@@ -203,6 +204,7 @@ function playBot() {
     }
 
     Check = [0, 0, 0];
+    notPlayer = -1;
     for (let i = 0; i < 3; i++) {
         Check[currCell[i][2 - i]]++;
         if (currCell[i][2 - i] == 0) {
@@ -218,7 +220,7 @@ function playBot() {
         return;
     }
 
-    if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2 && Check[2] == 0) {
+    if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2) {
         playX = notPlayer;
         playY = 2 - notPlayer;
         console.log("right diagonal - player winning but blocked from bot");
