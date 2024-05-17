@@ -11,11 +11,13 @@ let deathAnimation = false;
 
 function init() {
     for (let i = 0; i < 50; i++) {
+        //adding elements to the runes array
         runes.push(new Runes(Math.round(Math.random() * (10000 + canvas.width) - 5000),
             Math.round(Math.random() * (10000 + canvas.height) - 5000), 50));
     }
 
     for (let i = 0; i < 100; i++) {
+        //adding elements to the enemies array
         enemies.push(new Enemies(Math.round(Math.random() * 10000 - 5000 - canvas.width / 2),
             Math.round(Math.random() * 10000 - 5000 - canvas.height / 2), 75, 100));
     }
@@ -33,7 +35,10 @@ function update() {
         if (!game.pause) {
             // gameplayBGMusic.play();
 
+            //setting the player to idle position
             player.dir = 0;
+
+            //enemies pathfinding to the player
             for (let i = 0; i < 100; i++) {
                 enemies[i].pathfind(camera.x, camera.y, 3);
             }
@@ -108,7 +113,7 @@ function update() {
                 runes[i].collide(camera.x, camera.y,  player.width, player.height, collectedRunes);
             }
             
-            //game win
+            //game victory
             if (collectedRunes == 50) {
                 game.victory = true;
             }
@@ -221,21 +226,24 @@ function draw() {
 }
 
 function keydown(key) {
+    //game pause
     if (key == 27 && !game.pause) {
         game.pause = true;
     } else if (key == 27 && game.pause) {
         game.pause = false;
     }
 
+    //game restart
     if (key == 13 && game.victory || game.loss) {
         game.victory = false;
         game.loss = false;
         game.start = true;
-        timeLeft = 500;
+        timeLeft = 250;
     }
 }
 
 function mouseup() {
+    //kill enemies
     for (let i = 0; i < 10; i++) {
         enemies[i].collide(camera.x, camera.y, player.width, player.height);
     }
