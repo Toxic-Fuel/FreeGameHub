@@ -182,6 +182,44 @@ function playBot() {
         return;
     }
 
+    for (let y = 0; y < 3; y++) {
+        let Check = [0, 0, 0];
+        let notPlayer = [];
+        for (let x = 0; x < 3; x++) {
+            if (currCell[x][y] == 0)
+                notPlayer.push(x);
+            Check[currCell[x][y]]++;
+        }
+        for (i = 0; i < notPlayer.length; i++) {
+            if (Check[1] == 0 && notPlayer[i] < 2 && currCell[notPlayer[i] + 1][y] == 2) {
+                currCell[notPlayer[i]][y] = 2;
+                return;
+            } else if (Check[1] == 0 && notPlayer[i] > 0 && currCell[notPlayer[i] - 1][y] == 2) {
+                currCell[notPlayer[i]][y] = 2;
+                return;
+            }
+        }
+    }
+
+    for (let x = 0; x < 3; x++) {
+        let Check = [0, 0, 0];
+        let notPlayer = [];
+        for (let y = 0; y < 3; y++) {
+            if (currCell[x][y] == 0)
+                notPlayer.push(y);
+            Check[currCell[x][y]]++;
+        }
+        for (i = 0; i < notPlayer.length; i++) {
+            if (Check[1] == 0 && notPlayer[i] < 2 && currCell[x][notPlayer[i] + 1] == 2) {
+                currCell[x][notPlayer[i]] = 2;
+                return;
+            } else if (Check[1] == 0 && notPlayer[i] > 0 && currCell[x][notPlayer[i] - 1] == 2) {
+                currCell[x][notPlayer[i]] = 2;
+                return;
+            }
+        }
+    }
+    console.log("toilet");
     currCell[playX][playY] = currPlayer;
 }
 function checkWin() {
