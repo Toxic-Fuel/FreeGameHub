@@ -219,7 +219,6 @@ function playBot() {
             }
         }
     }
-    console.log("toilet");
     currCell[playX][playY] = currPlayer;
 }
 function checkWin() {
@@ -279,16 +278,16 @@ function mouseup() {
         } else {
             currPlayer = 1;
         }
-    }
-    if (playVSbot) {
-        playBot();
-        if (checkWin())
-            return;
+        if (playVSbot) {
+            playBot();
+            if (checkWin())
+                return;
 
-        if (currPlayer == 1) {
-            currPlayer = 2;
-        } else {
-            currPlayer = 1;
+            if (currPlayer == 1) {
+                currPlayer = 2;
+            } else {
+                currPlayer = 1;
+            }
         }
     }
 }
