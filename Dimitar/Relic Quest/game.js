@@ -21,6 +21,8 @@ function init() {
         enemies.push(new Enemies(Math.round(Math.random() * 10000 - 5000 - canvas.width / 2),
             Math.round(Math.random() * 10000 - 5000 - canvas.height / 2), 75, 100));
     }
+    
+    console.log('Initialization complete', { runes, enemies });
 }
 
 function update() {
