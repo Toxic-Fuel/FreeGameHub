@@ -6,7 +6,7 @@ class Runes{
     }
 
     collide (playerX, playerY, playerWidth, playerHeight) {
-        if(areColliding(this.x, this.y, this.size, this.size, playerX, playerY, playerWidth, playerHeight)){
+        if (areColliding(this.x, this.y, this.size, this.size, playerX, playerY, playerWidth, playerHeight)) {
             collectedRunes++;
             this.x = NaN;
         }
@@ -30,7 +30,7 @@ class Enemies{
     }
 
     collide (playerX, playerY, playerWidth, playerHeight, bool) {
-        if(areColliding(this.x, this.y, this.width, this.height, playerX, playerY, playerWidth, playerHeight)){
+        if (areColliding(this.x, this.y, this.width, this.height, playerX, playerY, playerWidth, playerHeight)) {
             this.x = NaN;
             deathAnimation = true;
         }

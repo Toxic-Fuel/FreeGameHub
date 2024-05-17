@@ -1,5 +1,5 @@
 let player = { x: 0, y: 0, width: 55, height: 110, dir: 0 };
-let frames = {player: 0, enemies: 0, death: 0};
+let frames = { player: 0, enemies: 0, death: 0 };
 let boss = { x: 0, y: 0, width: 100, height: 150 };
 let camera = { x: 0, y: 0, speed: 4 }, game = { victory: false, loss: false, pause: false, start: true };
 let updates = 0, timeLeft = 250, collectedRunes = 0;
@@ -63,10 +63,10 @@ function update() {
             }
 
             //anmimation enemies death
-            if(updates % 10 == 0){
+            if (updates % 10 == 0) {
                 frames.death++;
             }
-            if(frames.death > 4){
+            if (frames.death > 4) {
                 frames.death = NaN;
             }
 
@@ -164,8 +164,8 @@ function draw() {
             drawImage(monkeyRight[frames.player], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
 
-        for(let i = 0 ; i < 10; i++){
-            if(deathAnimation){
+        for (let i = 0 ; i < 10; i++) {
+            if (deathAnimation) {
                 drawImage(enemyDeath[frames.death], enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height);
             }
         }
