@@ -98,7 +98,7 @@ function playBot() {
             playX = randomInteger(3);
             playY = randomInteger(3);
         }
-        while (currCell[playX][playY] == 1)
+        while (currCell[playX][playY] == 1);
         console.log("starting move");
         currCell[playX][playY] = currPlayer;
         return;

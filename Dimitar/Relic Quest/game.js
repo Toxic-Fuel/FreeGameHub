@@ -1,4 +1,4 @@
-let player = { x: 0, y: 0, width: 55, height: 110, dir: 0 };
+let player = { x: 0, y: 0, width: 55, height: 110, dir: 0, health: 275 };
 let frames = { player: 0, enemies: 0, death: 0 };
 let boss = { x: 0, y: 0, width: 100, height: 150 };
 let camera = { x: 0, y: 0, speed: 4 }, game = { victory: false, loss: false, pause: false, start: true };
@@ -16,7 +16,7 @@ function init() {
             Math.round(Math.random() * (10000 + canvas.height) - 5000), 50));
     }
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 10; i++) {
         //adding elements to the enemies array
         enemies.push(new Enemies(Math.round(Math.random() * 10000 - 5000 - canvas.width / 2),
             Math.round(Math.random() * 10000 - 5000 - canvas.height / 2), 75, 100));
@@ -41,7 +41,7 @@ function update() {
             player.dir = 0;
 
             //enemies pathfinding to the player
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 10; i++) {
                 enemies[i].pathfind(camera.x, camera.y, 3);
             }
 
@@ -97,26 +97,26 @@ function update() {
             }
 
             //border
-            if (camera.y <= -5000 + canvas.height / 2 && player.dir == 1) {
-                //north side of the border
-                player.dir = 0;
-                camera.y = -5000 + canvas.height / 2;
-            }
-            if (camera.y >= 5000 - canvas.height / 2 && player.dir == 2) {
-                //south side of the border
-                player.dir = 0;
-                camera.y = 5000 - canvas.height / 2;
-            }
-            if (camera.x <= -5000 + canvas.width / 2 && player.dir == 3) {
-                //east side of the border
-                player.dir = 0;
-                camera.x = -5000 + canvas.width / 2;
-            }
-            if (camera.x >= 5000 - canvas.width / 2 && player.dir == 4) {
-                //west side of the border
-                player.dir = 0;
-                camera.x = 5000 - canvas.width / 2;
-            }
+            // if (camera.y <= -5000 + canvas.height / 2 && player.dir == 1) {
+            //     //north side of the border
+            //     player.dir = 0;
+            //     camera.y = -5000 + canvas.height / 2;
+            // }
+            // if (camera.y >= 5000 - canvas.height / 2 && player.dir == 2) {
+            //     //south side of the border
+            //     player.dir = 0;
+            //     camera.y = 5000 - canvas.height / 2;
+            // }
+            // if (camera.x <= -5000 + canvas.width / 2 && player.dir == 3) {
+            //     //east side of the border
+            //     player.dir = 0;
+            //     camera.x = -5000 + canvas.width / 2;
+            // }
+            // if (camera.x >= 5000 - canvas.width / 2 && player.dir == 4) {
+            //     //west side of the border
+            //     player.dir = 0;
+            //     camera.x = 5000 - canvas.width / 2;
+            // }
 
             //collecting runes
             for (let i = 0; i < 50; i++) {
@@ -150,7 +150,6 @@ function draw() {
     if (!game.loss && !game.victory && game.start) {
         //drawing the gameplay background
         drawImage(backDarkForest, -5000 + canvas.width / 2 - camera.x, -5000 + canvas.height / 2 - camera.y, 10000, 10000);
-
         for (let i = 0; i < 50; i++) {
             //drawing the runes
             drawImage(rune, runes[i].x + canvas.width / 2 - camera.x, runes[i].y + canvas.height / 2 - camera.y, runes[i].size, runes[i].size);
@@ -207,6 +206,18 @@ function draw() {
         context.font = '50px MS PGothic';
         context.fillText(`Time: ${timeLeft}`, canvas.width - 225, 0);
 
+        //healthbar
+        context.fillStyle = '#007700';
+        context.fillRect(10, 70, 275, 50);
+        context.fillStyle = '#00FF00';
+        context.fillRect(10, 70, player.health, 50);
+        context.strokeStyle = '#004400';
+        context.lineWidth = 3;
+        context.strokeRect(10, 70, 275, 50);
+        context.fillStyle = '#004400';
+        context.font = '42.5px MS PGothic';
+        context.fillText('Health', 90, 72.5);
+
         if (game.pause) {
             //drawing a white partially transparent background
             context.fillStyle = '#FFFFFF';
@@ -238,7 +249,7 @@ function draw() {
         //text for command to restart
         context.fillStyle = '#FF5733';
         context.font = '50px MS PGothic';
-        context.fillText('Press "Enter" to restart.', 465, 350);
+        context.fillText('Press "r" to restart.', 465, 350);
     }
 
     if (game.loss) {
@@ -254,7 +265,7 @@ function draw() {
         //text for command to restart
         context.fillStyle = '#FF5733';
         context.font = '50px MS PGothic';
-        context.fillText('Press "Enter" to restart.', 465, 350);
+        context.fillText('Press "r" to restart.', 465, 350);
     }
 }
 
@@ -267,11 +278,15 @@ function keydown(key) {
     }
 
     //game restart
-    if (key == 13 && game.victory || game.loss) {
+    if (key == 82 && game.victory || game.loss) {
         game.victory = false;
         game.loss = false;
         game.start = true;
         timeLeft = 250;
+        player.x = 0;
+        camera;x = 0;
+        player.y = 0;
+        camera.y = 0;
     }
 }
 
@@ -280,4 +295,5 @@ function mouseup() {
     for (let i = 0; i < 10; i++) {
         enemies[i].collide(camera.x, camera.y, player.width, player.height);
     }
+    // console.log(mouseX, mouseY);
 }
