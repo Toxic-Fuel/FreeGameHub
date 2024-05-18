@@ -301,6 +301,13 @@ function playBot() {
             }
         }
     }
+    do {
+        playX = randomInteger(3);
+        playY = randomInteger(3);
+    }
+    while (currCell[playX][playY] == 1);
+    console.log("no other possible moves");
+    currCell[playX][playY] = currPlayer;
 }
 function checkWin() {
     for (let y = 0; y < 3; y++) {
