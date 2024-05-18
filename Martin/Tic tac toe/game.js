@@ -305,7 +305,7 @@ function playBot() {
         playX = randomInteger(3);
         playY = randomInteger(3);
     }
-    while (currCell[playX][playY] == 1);
+    while (currCell[playX][playY] == 1 || currCell[playX][playY] == 2);
     console.log("no other possible moves");
     currCell[playX][playY] = currPlayer;
 }
