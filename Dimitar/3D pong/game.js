@@ -101,20 +101,24 @@ function draw() {
         context.arc(ORKEX(ball.x, ball.z), ORKEY(ball.y, ball.z), ORKER(ball.r, ball.z), 0, 2 * Math.PI, false);
         context.fill();
 
+        context.fillStyle = '#00FF00';
+        context.strokeStyle = '#00FF00';
+        context.lineWidth = 3;
+        context.strokeRect(ORKEX(paddle.x, paddle.z), ORKEY(paddle.y, paddle.z), ORKER(paddle.width, paddle.z), ORKER(paddle.height, paddle.z));
         context.globalAlpha = 0.5;
-        context.fillStyle = '#00FFFF';
         context.fillRect(ORKEX(paddle.x, paddle.z), ORKEY(paddle.y, paddle.z), ORKER(paddle.width, paddle.z), ORKER(paddle.height, paddle.z));
+
         context.fillStyle = '#FF0000';
         context.font = "100px Arial";
         context.fillText(score, 90, 100);
 
         if(pause){
-            context.globalAlpha = 0.5;
-            context.fillStyle = '#000000';
+            context.globalAlpha = 0.3;
+            context.fillStyle = '#FFFFFF';
             context.fillRect(0, 0, canvas.width, canvas.height);
 
             context.globalAlpha = 1;
-            context.fillStyle = '#FFA200';
+            context.fillStyle = '#FFC300';
             context.font = '150px MS PGothic';
             context.fillText('PAUSE', canvas.width / 2 - 250, 100);
         }
