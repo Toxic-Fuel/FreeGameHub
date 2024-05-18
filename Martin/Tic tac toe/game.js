@@ -301,13 +301,23 @@ function playBot() {
             }
         }
     }
-    do {
-        playX = randomInteger(3);
-        playY = randomInteger(3);
+    freeCell = false;
+    for (let x = 0; x < 3; x++) {
+        for (let y = 0; y < 3; y++) {
+            if (currCell[x][y] == 0) {
+                freeCell = true;
+            }
+        }
     }
-    while (currCell[playX][playY] == 1 || currCell[playX][playY] == 2);
-    console.log("no other possible moves");
-    currCell[playX][playY] = currPlayer;
+    if (freeCell) {
+        do {
+            playX = randomInteger(3);
+            playY = randomInteger(3);
+        }
+        while (currCell[playX][playY] == 1 || currCell[playX][playY] == 2);
+        console.log("no other possible moves");
+        currCell[playX][playY] = currPlayer;
+    }
 }
 function checkWin() {
     for (let y = 0; y < 3; y++) {
