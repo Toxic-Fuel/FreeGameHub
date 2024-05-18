@@ -173,10 +173,6 @@
             }
 
             
-            function tryToLoadWithFullPath(pathAndImageName, backupColor) {
-                return new MyImage(pathAndImageName, backupColor);
-            }
-
             function drawImage(myImageObject, x, y, xs, ys) {
                 myImageObject.draw(x, y, xs, ys);
             }
@@ -217,23 +213,6 @@
                 context.arc(centerX, centerY, radius, 0, Math.PI * 2);
                 context.fill();
                 context.stroke();
-            }
-
-            function drawPi6ka(aX, aY, aR, aC, aB) {
-                drawCircle(aX, aY, circle.r, aC, aB);
-                drawCircle(aX + 55, aY, circle.r, aC, aB);
-                context.fillRect(aX - 3, aY - 150, 60, 150);
-                drawCircle(aX + 27.5, aY - 150, 30);
-                drawLine(aX - 3, aY - aR + 1, aX - 2, aY - 150);
-                drawLine(aX + 57, aY - aR + 1, aX + 58, aY - 150);
-                drawLine(aX + 27.5, aY - 150, aX + 27.5, aY - 180);
-
-            }
-
-            function KURsor(aX, aY, aR, aC, aB) {
-                drawPi6ka(aX, aY, aR, aC, aB);
-                circle.x += (mouseX - circle.x) / 10 - 2.5;
-                circle.y += (mouseY - circle.y) / 10;
             }
 
             function updateMousePosition(e) {
