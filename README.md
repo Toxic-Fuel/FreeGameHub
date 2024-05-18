@@ -1,4 +1,4 @@
-Проект: Website за browser игри
+Проект: Website за online singleplayer игри
 
 Участници: 
   Димитър Мяшков 8б клас;
