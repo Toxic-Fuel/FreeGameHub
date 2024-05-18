@@ -31,7 +31,7 @@ class Enemies{
 
     collide (playerX, playerY, playerWidth, playerHeight) {
         if (areColliding(this.x, this.y, this.width, this.height, playerX, playerY, playerWidth, playerHeight)) {
-            this.x = NaN;
+            player.health--;
         }
     }
 }

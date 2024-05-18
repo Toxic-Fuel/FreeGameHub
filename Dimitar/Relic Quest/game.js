@@ -1,7 +1,7 @@
 let player = { x: 0, y: 0, width: 55, height: 110, dir: 0, health: 275 };
 let frames = { player: 0, enemies: 0, death: 0 };
 let boss = { x: 0, y: 0, width: 100, height: 150 };
-let camera = { x: 0, y: 0, speed: 4 }, game = { victory: false, loss: false, pause: false, start: true };
+let camera = { x: 0, y: 0, speed: 4 }, game = { victory: false, loss: true, pause: false, start: true };
 let updates = 0, timeLeft = 250, collectedRunes = 0;
 let runes = [], enemies = [], distanceX = [], distanceY = [], angle = [];
 let deathAnimation = false;
@@ -10,7 +10,7 @@ let deathAnimation = false;
 // const lossBGMusic = new Audio('./music/FullScores/Orchestral SCores/Ove Melaa - Times.mp3');
 
 function init() {
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 70; i++) {
         //adding elements to the runes array
         runes.push(new Runes(Math.round(Math.random() * (10000 + canvas.width) - 5000),
             Math.round(Math.random() * (10000 + canvas.height) - 5000), 50));
@@ -57,9 +57,6 @@ function update() {
             if (updates % 100 == 0) {
                 timeLeft--;
             }
-            if (timeLeft <= 0) {
-                game.loss = true;
-            }
 
             //animation enemies
             if (updates % 10 == 0) {
@@ -97,36 +94,59 @@ function update() {
             }
 
             //border
-            // if (camera.y <= -5000 + canvas.height / 2 && player.dir == 1) {
-            //     //north side of the border
-            //     player.dir = 0;
-            //     camera.y = -5000 + canvas.height / 2;
-            // }
-            // if (camera.y >= 5000 - canvas.height / 2 && player.dir == 2) {
-            //     //south side of the border
-            //     player.dir = 0;
-            //     camera.y = 5000 - canvas.height / 2;
-            // }
-            // if (camera.x <= -5000 + canvas.width / 2 && player.dir == 3) {
-            //     //east side of the border
-            //     player.dir = 0;
-            //     camera.x = -5000 + canvas.width / 2;
-            // }
-            // if (camera.x >= 5000 - canvas.width / 2 && player.dir == 4) {
-            //     //west side of the border
-            //     player.dir = 0;
-            //     camera.x = 5000 - canvas.width / 2;
-            // }
+            if (camera.y <= -5000 + canvas.height / 2 && player.dir == 1) {
+                //north side of the border
+                player.dir = 0;
+                camera.y = -5000 + canvas.height / 2;
+            }
+            if (camera.y >= 5000 - canvas.height / 2 && player.dir == 2) {
+                //south side of the border
+                player.dir = 0;
+                camera.y = 5000 - canvas.height / 2;
+            }
+            if (camera.x <= -5000 + canvas.width / 2 && player.dir == 3) {
+                //east side of the border
+                player.dir = 0;
+                camera.x = -5000 + canvas.width / 2;
+            }
+            if (camera.x >= 5000 - canvas.width / 2 && player.dir == 4) {
+                //west side of the border
+                player.dir = 0;
+                camera.x = 5000 - canvas.width / 2;
+            }
 
             //collecting runes
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 70; i++) {
                 runes[i].collide(camera.x, camera.y,  player.width, player.height, collectedRunes);
             }
-            
+
+            //removing the runes that spawn out of the border
+            for (let i = 0; i < 70; i++) {
+                if (runes[i].x < -5000 + canvas.width / 2 || runes[i].x > 5000 - canvas.width / 2 || 
+                    runes[i].y < -5000 + canvas.height / 2 || runes[i].y > 5000 - canvas.height / 2) {
+                    runes[i].x = NaN;
+                }
+            }
+
+            //healthbar
+            if (player.health <= 0) {
+                player.health = 0;
+            }
+
+            //damage from enemies
+            for (let i = 0; i < 10; i++) {
+                enemies[i].collide(camera.x, camera.y, player.width, player.height);
+            }
+
             //game victory
-            if (collectedRunes == 50) {
+            if (collectedRunes == 20) {
                 game.victory = true;
             }
+
+            //game loss
+            if(timeLeft <= 0 || player.health == 0){
+                game.loss = true;
+            }    
         }
     } else {
         // gameplayBGMusic.pause();
@@ -199,7 +219,7 @@ function draw() {
         //text how much runes have been collected
         context.fillStyle = '#FFC300';
         context.font = '50px MS PGothic';
-        context.fillText(`runes: ${collectedRunes} / 50`, 10, 0);
+        context.fillText(`runes: ${collectedRunes} / 20`, 10, 0);
 
         //text how much time is left
         context.fillStyle = '#FF0000';
@@ -244,12 +264,12 @@ function draw() {
         //you win text
         context.fillStyle = '#FFC300';
         context.font = '150px MS PGothic';
-        context.fillText('YOU WIN', 425, player.height);
+        context.fillText('YOU WIN!', canvas.width / 2 - 320, player.height);
 
         //text for command to restart
         context.fillStyle = '#FF5733';
         context.font = '50px MS PGothic';
-        context.fillText('Press "r" to restart.', 465, 350);
+        context.fillText('Press "r" to restart.', canvas.width / 2 - 220, 350);
     }
 
     if (game.loss) {
@@ -260,12 +280,12 @@ function draw() {
         //game over text
         context.fillStyle = '#FF0000';
         context.font = '150px MS PGothic';
-        context.fillText('GAME OVER', 300, player.height);
+        context.fillText('GAME OVER', canvas.width / 2 - 425, player.height);
 
         //text for command to restart
         context.fillStyle = '#FF5733';
         context.font = '50px MS PGothic';
-        context.fillText('Press "r" to restart.', 465, 350);
+        context.fillText('Press "r" to restart.', canvas.width / 2 - 220, 350);
     }
 }
 
@@ -284,16 +304,12 @@ function keydown(key) {
         game.start = true;
         timeLeft = 250;
         player.x = 0;
-        camera;x = 0;
+        camera.x = 0;
         player.y = 0;
         camera.y = 0;
     }
 }
 
 function mouseup() {
-    //kill enemies
-    for (let i = 0; i < 10; i++) {
-        enemies[i].collide(camera.x, camera.y, player.width, player.height);
-    }
     // console.log(mouseX, mouseY);
 }
