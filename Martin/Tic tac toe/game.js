@@ -121,6 +121,92 @@ function playBot() {
             return;
         }
     }
+    for (let x = 0; x < 3; x++) {
+        let Check = [0, 0, 0];
+        let notPlayer = -1;
+        for (let y = 0; y < 3; y++) {
+            if (currCell[x][y] == 0) {
+                notPlayer = y;
+            }
+            Check[currCell[x][y]]++;
+        }
+
+        if (Check[2] == 2 && notPlayer != -1 && currPlayer == 2) {
+            playX = x;
+            playY = notPlayer;
+            console.log("columns - bot wins");
+            currCell[playX][playY] = currPlayer;
+            return;
+        }
+    }
+
+    let Check = [0, 0, 0];
+    let notPlayer = -1;
+    for (let i = 0; i < 3; i++) {
+        Check[currCell[i][i]]++;
+        if (currCell[i][i] == 0) {
+            notPlayer = i;
+        }
+    }
+
+    if (Check[2] == 2 && notPlayer != -1 && currPlayer == 2) {
+        playX = notPlayer;
+        playY = notPlayer;
+        console.log("left diagonal - bot wins");
+        currCell[playX][playY] = currPlayer;
+        return;
+    }
+
+    Check = [0, 0, 0];
+    notPlayer = -1;
+    for (let i = 0; i < 3; i++) {
+        Check[currCell[i][2 - i]]++;
+        if (currCell[i][2 - i] == 0) {
+            notPlayer = i;
+        }
+    }
+
+    if (Check[2] == 2 && notPlayer != -1 && currPlayer == 2) {
+        playX = notPlayer;
+        playY = 2 - notPlayer;
+        console.log("riight diagonal - bot wins");
+        currCell[playX][playY] = currPlayer;
+        return;
+    }
+
+    Check = [0, 0, 0];
+    notPlayer = -1;
+    for (let i = 0; i < 3; i++) {
+        Check[currCell[i][i]]++;
+        if (currCell[i][i] == 0) {
+            notPlayer = i;
+        }
+    }
+
+    if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2) {
+        playX = notPlayer;
+        playY = notPlayer;
+        console.log("left diagonal - player winning but blocked from bot");
+        currCell[playX][playY] = currPlayer;
+        return;
+    }
+
+    Check = [0, 0, 0];
+    notPlayer = -1;
+    for (let i = 0; i < 3; i++) {
+        Check[currCell[i][2 - i]]++;
+        if (currCell[i][2 - i] == 0) {
+            notPlayer = i;
+        }
+    }
+
+    if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2) {
+        playX = notPlayer;
+        playY = 2 - notPlayer;
+        console.log("right diagonal - player winning but blocked from bot");
+        currCell[playX][playY] = currPlayer;
+        return;
+    }
 
     for (let y = 0; y < 3; y++) {
         let Check = [0, 0, 0];
@@ -150,24 +236,6 @@ function playBot() {
             Check[currCell[x][y]]++;
         }
 
-        if (Check[2] == 2 && notPlayer != -1 && currPlayer == 2) {
-            playX = x;
-            playY = notPlayer;
-            console.log("columns - bot wins");
-            currCell[playX][playY] = currPlayer;
-            return;
-        }
-    }
-    for (let x = 0; x < 3; x++) {
-        let Check = [0, 0, 0];
-        let notPlayer = -1;
-        for (let y = 0; y < 3; y++) {
-            if (currCell[x][y] == 0) {
-                notPlayer = y;
-            }
-            Check[currCell[x][y]]++;
-        }
-
 
         if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2) {
             playX = x;
@@ -176,56 +244,6 @@ function playBot() {
             currCell[playX][playY] = currPlayer;
             return;
         }
-    }
-
-    let Check = [0, 0, 0];
-    let notPlayer = -1;
-    for (let i = 0; i < 3; i++) {
-        Check[currCell[i][i]]++;
-        if (currCell[i][i] == 0) {
-            notPlayer = i;
-        }
-    }
-
-    if (Check[2] == 2 && notPlayer != -1 && currPlayer == 2) {
-        playX = notPlayer;
-        playY = notPlayer;
-        console.log("left diagonal - bot wins");
-        currCell[playX][playY] = currPlayer;
-        return;
-    }
-
-    if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2) {
-        playX = notPlayer;
-        playY = notPlayer;
-        console.log("left diagonal - player winning but blocked from bot");
-        currCell[playX][playY] = currPlayer;
-        return;
-    }
-
-    Check = [0, 0, 0];
-    notPlayer = -1;
-    for (let i = 0; i < 3; i++) {
-        Check[currCell[i][2 - i]]++;
-        if (currCell[i][2 - i] == 0) {
-            notPlayer = i;
-        }
-    }
-
-    if (Check[2] == 2 && notPlayer != -1 && currPlayer == 2) {
-        playX = notPlayer;
-        playY = 2 - notPlayer;
-        console.log("riight diagonal - bot wins");
-        currCell[playX][playY] = currPlayer;
-        return;
-    }
-
-    if (Check[1] == 2 && notPlayer != -1 && currPlayer == 2) {
-        playX = notPlayer;
-        playY = 2 - notPlayer;
-        console.log("right diagonal - player winning but blocked from bot");
-        currCell[playX][playY] = currPlayer;
-        return;
     }
 
     //chekings when there isnt any possibility of player winning and making the bot place a sapce wherer he alreay has one
