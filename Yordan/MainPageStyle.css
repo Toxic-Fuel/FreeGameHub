@@ -98,7 +98,7 @@ flex-wrap: wrap;
 }
 div.IconImg {
     text-align: center;
-    width: calc(25% - 10px);
+    width: calc(25% - 15px);
     height: 120%;
     
     box-sizing: border-box;
@@ -114,5 +114,5 @@ h1 {
     text-align: center;
     text-decoration: none;
     font-family: "Cooper";
-    font-size: 30pt;
+    font-size: 28pt;
 }
