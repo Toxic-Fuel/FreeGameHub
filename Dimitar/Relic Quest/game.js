@@ -1,15 +1,11 @@
 let player = { x: 0, y: 0, width: 55, height: 110, dir: 0, health: 275, mana: 0 };
-let frames = { player: 0, enemies: 0, death: 0 };
-let boss = { x: 0, y: 0, width: 100, height: 150 };
+let frames = { player: 0, enemies: 0 };
 let camera = { x: 0, y: 0, speed: 4 }, game = { victory: false, loss: false, pause: false, start: true };
-let magic1 = { x: 0, y: 0, width: 175, height: 75, frame: 0, cooldown: 10, chosen: false, activated: false, cooldownStart: false };
-let magic2 = { x: 0, y: 0, width: 175, height: 75, frame: 0, cooldown: 25, chosen: false, activated: false, cooldownStart: false };
-let magic3 = { x: 0, y: 0, width: 125, height: 100, frame: 0, cooldown: 35, chosen: false, activated: false, cooldownStart: false };
-let magic4 = { x: 0, y: 0, width: 50, height: 175, frame: 0, cooldown: 60, chosen: false, activated: false, cooldownStart: false };
-let updates = 0, timeLeft = 250;
+let magic = { x: undefined, y: undefined, width: 125, height: 125, frame: 0, chosen: false, activated: false };
+let crystal = { x: undefined, y: undefined, width: 75, height: 175, frame: 0, draw: false, end: false, reverse: false };
+let updates = 0;
 let runes = [], enemies = [], distanceX = [], distanceY = [], angle = [];
-// const bossfightBGMusic = new Audio('./music/FullScores/Orchestral Scores/bosstheme_WO_low.mp3')
-// const gameplayBGMusic = new Audio('./music/Loops/Drum Only Loops/Ove Melaa - DrumLoop 1.mp3');
+// const gameplayBGMusic = new Audio('./music/FullScores/Orchestral Scores/bosstheme_WO_low.mp3');
 // const winBGMusic = new Audio('./music/FullScores/Orchestral Scores/Ove Melaa - Heaven Sings.mp3');
 // const lossBGMusic = new Audio('./music/FullScores/Orchestral SCores/Ove Melaa - Times.mp3');
 
@@ -26,7 +22,6 @@ function init() {
             Math.round(Math.random() * 10000 - 5000 - canvas.height / 2), 75, 100));
     }
     
-    // console.log('Initialization complete', runes, enemies);
 }
 
 function update() {
@@ -57,11 +52,6 @@ function update() {
                 frames.player = 0;
             }
 
-            //timer
-            if (updates % 100 == 0) {
-                timeLeft--;
-            }
-
             //animation enemies
             if (updates % 10 == 0) {
                 frames.enemies++;
@@ -70,22 +60,26 @@ function update() {
                 frames.enemies = 0;
             }
 
-            //anmimation enemies death
-            if (updates % 10 == 0) {
-                frames.death++;
-            }
-            if (frames.death > 4) {
-                frames.death = NaN;
+            //animation magic
+            if (magic.activated) {
+                if (updates % 10 == 0) {
+                    magic.frame++;
+                }
             }
 
-            //animation magic
-            if (magic1.activated) {
-                if (updates % 10 == 0) {
-                    magic1.frame++;
-                }
-                if(magic1.frame >= 5) {
-                    magic1.frame = 5;
-                }
+            //animation crystal
+            if (updates % 10 == 0 && crystal.draw) {
+                crystal.frame++;
+            }
+            if (crystal.frame >= 6) {
+                crystal.reverse = true;
+            }
+            if (crystal.reverse) {
+                crystal.frame--;
+            }
+            if (crystal.frame < 0 && crystal.draw) {
+                crystal.frame = 0;
+                crystal.end = true;
             }
 
             //movement
@@ -108,23 +102,19 @@ function update() {
             }
 
             //border
-            if (camera.y <= -5000 + canvas.height / 2 && player.dir == 1) {
-                //north side of the border
+            if (camera.y <= -5000 + canvas.height / 2 && player.dir == 1) { //north side of the border
                 player.dir = 0;
                 camera.y = -5000 + canvas.height / 2;
             }
-            if (camera.y >= 5000 - canvas.height / 2 && player.dir == 2) {
-                //south side of the border
+            if (camera.y >= 5000 - canvas.height / 2 && player.dir == 2) { //south side of the border
                 player.dir = 0;
                 camera.y = 5000 - canvas.height / 2;
             }
-            if (camera.x <= -5000 + canvas.width / 2 && player.dir == 3) {
-                //east side of the border
+            if (camera.x <= -5000 + canvas.width / 2 && player.dir == 3) { //east side of the border
                 player.dir = 0;
                 camera.x = -5000 + canvas.width / 2;
             }
-            if (camera.x >= 5000 - canvas.width / 2 && player.dir == 4) {
-                //west side of the border
+            if (camera.x >= 5000 - canvas.width / 2 && player.dir == 4) { //west side of the border
                 player.dir = 0;
                 camera.x = 5000 - canvas.width / 2;
             }
@@ -136,8 +126,8 @@ function update() {
 
             //removing the runes that spawn out of the border
             for (let i = 0; i < 70; i++) {
-                if (runes[i].x < -5000 + canvas.width / 2 || runes[i].x > 5000 - canvas.width / 2 || 
-                    runes[i].y < -5000 + canvas.height / 2 || runes[i].y > 5000 - canvas.height / 2) {
+                if (runes[i].x < -5000 + canvas.width / 2 || runes[i].x > 5000 - canvas.width / 2 || runes[i].y < -5000 + canvas.height / 2 ||
+                    runes[i].y > 5000 - canvas.height / 2) {
                     runes[i].x = NaN;
                 }
             }
@@ -148,19 +138,31 @@ function update() {
             }
 
             //mana
-            if(player.mana >= 11){
+            if (player.mana >= 11) {
                 player.mana = 11;
             }
 
             //damage from enemies
             for (let i = 0; i < 10; i++) {
-                enemies[i].collide(camera.x, camera.y, player.width, player.height);
+                enemies[i].collidePlayer(camera.x, camera.y, player.width, player.height);
+            }
+
+            //crystal
+            if (magic.frame >= 7) {
+                crystal.draw = true;
+                crystal.x = magic.x + 25;
+                crystal.y = magic.y;
+            }
+
+            //game victory
+            if (crystal.end) {
+                game.victory = true;
             }
 
             //game loss
             if(player.health == 0){
                 game.loss = true;
-            }    
+            }
         }
     } else {
         // gameplayBGMusic.pause();
@@ -185,7 +187,7 @@ function draw() {
     if (!game.loss && !game.victory && game.start) {
         //drawing the gameplay background
         drawImage(backDarkForest, -5000 + canvas.width / 2 - camera.x, -5000 + canvas.height / 2 - camera.y, 10000, 10000);
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 70; i++) {
             //drawing the runes
             drawImage(rune, runes[i].x + canvas.width / 2 - camera.x, runes[i].y + canvas.height / 2 - camera.y, runes[i].size, runes[i].size);
         }
@@ -202,26 +204,18 @@ function draw() {
             }
         }
 
-        //1st type magic
-        if (magic1.activated) {
-            if (magic1.frame < 5) {
-                drawImage(druidAttack1[magic1.frame], magic1.x + canvas.width / 2 - camera.x, magic1.y, magic1.width, magic1.height);
+        //magic
+        if (magic.activated) {
+            if (magic.frame < 7) {
+                drawImage(druidAttack3[magic.frame], magic.x, magic.y, magic.width, magic.height);
             }
         }
 
-        //2nd type magic
-        if (magic2.activated) {
-            drawImage(druidAttack2[magic2.frame], magic2.x + canvas.width / 2 - camera.x, magic2.y + canvas.height / 2 - camera.y, magic2.width, magic2,height);
-        }
-
-        //3th type magic
-        if (magic3.activated) {
-            drawImage(druidAttack3[magic3.frame], magic3.x + canvas.width / 2 - camera.x, magic3.y + canvas.height / 2 - camera.y, magic3.width, magic3.height);
-        }
-
-        //4th type magic
-        if (magic4.activated) {
-            drawImage(druidAttack4[magic4.frame], magic4.x + canvas.width / 2 - camera.x, magic4.y + canvas.height / 2 - camera.y, magic4.width, magic4.height);
+        //crystal
+        if (crystal.draw) {
+            if (crystal.frame < 7 && crystal.frame > -1) {
+                drawImage(ancientCrystal[crystal.frame], crystal.x, crystal.y, crystal.width, crystal.height);
+            }
         }
 
         //player
@@ -245,11 +239,6 @@ function draw() {
             //walking right
             drawImage(monkeyRight[frames.player], player.x + canvas.width / 2, player.y + canvas.height / 2, player.width, player.height);
         }
-
-        //text how much time is left
-        // context.fillStyle = '#FF0000';
-        // context.font = '50px MS PGothic';
-        // context.fillText(`Time: ${timeLeft}`, canvas.width - 225, 0);
 
         //healthbar
         context.fillStyle = '#007700';
@@ -335,12 +324,11 @@ function keydown(key) {
     }
 
     //game restart
-    if (key == 82 && game.loss || game.victory) {
+    if (key == 82 && game.loss) {
         game.victory = false;
         game.loss = false;
         game.pause = false;
         game.start = true;
-        timeLeft = 250;
         player.x = 0;
         camera.x = 0;
         player.y = 0;
@@ -351,48 +339,53 @@ function keydown(key) {
             enemies[i].x = Math.round(Math.random() * (10000 + canvas.width) - 5000);
             enemies[i].y = Math.round(Math.random() * (10000 + canvas.width) - 5000);
         }
+        magic.activated = false;
+        crystal.frame = 0;
+        crystal.reverse = false;
+        crystal.end = false;
+        crystal.draw = false;
+        magic.frame = false;
+    }
+    if (key == 82 && game.victory) {
+        game.victory = false;
+        game.loss = false;
+        game.pause = false;
+        game.start = true;
+        player.x = 0;
+        camera.x = 0;
+        player.y = 0;
+        camera.y = 0;
+        player.health = 275;
+        player.mana = 0;
+        for (let i = 0; i < 10; i++) {
+            enemies[i].x = Math.round(Math.random() * (10000 + canvas.width) - 5000);
+            enemies[i].y = Math.round(Math.random() * (10000 + canvas.width) - 5000);
+        }
+        magic.activated = false;
+        crystal.frame = 0;
+        crystal.reverse = false;
+        crystal.end = false;
+        crystal.draw = false;
+        magic.frame = 0;
     }
 
     //magic
     if (!game.pause && !game.victory && !game.loss) {
         if (key == 49) { //1
-            magic1.chosen = true;
-        } else if (key == 50) { //2
-            magic2.chosen = true;
-        } else if (key == 51) { //3
-            magic3.chosen = true;
-        } else if (key == 52) { //4
-            magic4.chosen = true;
+            magic.chosen = true;
         }
     }
 }
 
 function mouseup() {
-    console.log(mouseX, mouseY);
+    // console.log(mouseX, mouseY);
 
     if (!game.pause) {
-        if (magic1.chosen) {
-            magic1.x = mouseX;
-            magic1.y = mouseY;
-            magic1.frame = 0;
-            magic1.activated = true;
-            console.log("a", magic1.x, magic1.y);
-        }
-        if (magic2.chosen && magic2.cooldown <= 0) {
-            magic2.x = mouseX;
-            magic2.y = mouseY;
-            magic2.frame = 0;
-            magic2.activated = true;
-        }
-        if(magic3.activated && magic3.cooldown <= 0) {
-            magic3.x = mouseX;
-            magic3.y = mouseY;
-            magic3.activated = true;
-        }
-        if(magic4.activated && magic4.cooldown <= 0) {
-            magic4.x = mouseX;
-            magic4.y = mouseY;
-            magic4.activated = true;
+        if (magic.chosen && player.mana == 11) {
+            magic.x = mouseX - magic.width / 2;
+            magic.y = mouseY - magic.height / 2;
+            magic.frame = 0;
+            magic.activated = true;
         }
     }
 }

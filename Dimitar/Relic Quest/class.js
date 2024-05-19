@@ -29,7 +29,7 @@ class Enemies{
         this.y += Math.sin(angle) * speed;
     }
 
-    collide (playerX, playerY, playerWidth, playerHeight) {
+    collidePlayer (playerX, playerY, playerWidth, playerHeight) {
         if (areColliding(this.x, this.y, this.width, this.height, playerX, playerY, playerWidth, playerHeight) && player.health > 0) {
             player.health -= 0.5;
         }
