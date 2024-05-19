@@ -2,7 +2,7 @@ let player = { x: 0, y: 0, width: 55, height: 110, dir: 0, health: 275 };
 let frames = { player: 0, enemies: 0, death: 0 };
 let boss = { x: 0, y: 0, width: 100, height: 150 };
 let camera = { x: 0, y: 0, speed: 4 }, game = { victory: false, loss: false, pause: false, start: true };
-let updates = 0, timeLeft = 250, collectedRunes = 0;
+let updates = 0, timeLeft = 250, mana = 0;
 let runes = [], enemies = [], distanceX = [], distanceY = [], angle = [];
 let deathAnimation = false;
 // const bossfightBGMusic = new Audio('./music/FullScores/Orchestral Scores/bosstheme_WO_low.mp3')
@@ -118,7 +118,7 @@ function update() {
 
             //collecting runes
             for (let i = 0; i < 70; i++) {
-                runes[i].collide(camera.x, camera.y,  player.width, player.height, collectedRunes);
+                runes[i].collide(camera.x, camera.y,  player.width, player.height, mana);
             }
 
             //removing the runes that spawn out of the border
@@ -134,24 +134,24 @@ function update() {
                 player.health = 0;
             }
 
+            //mana
+            if(mana >= 11){
+                mana = 11;
+            }
+            
             //damage from enemies
             for (let i = 0; i < 10; i++) {
                 enemies[i].collide(camera.x, camera.y, player.width, player.height);
             }
 
-            //game victory
-            if (collectedRunes == 20) {
-                game.victory = true;
-            }
-
             //game loss
-            if(timeLeft <= 0 || player.health == 0){
+            if(player.health == 0){
                 game.loss = true;
             }    
         }
     } else {
         // gameplayBGMusic.pause();
-        collectedRunes = 0;
+        mana = 0;
         game.start = false;
     }
 
@@ -217,16 +217,11 @@ function draw() {
                 drawImage(enemyDeath[frames.death], enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height);
             }
         }
-        
-        //text how much runes have been collected
-        context.fillStyle = '#00FFFF';
-        context.font = '50px MS PGothic';
-        context.fillText(`runes: ${collectedRunes} / 20`, 10, 0);
 
         //text how much time is left
-        context.fillStyle = '#FF0000';
-        context.font = '50px MS PGothic';
-        context.fillText(`Time: ${timeLeft}`, canvas.width - 225, 0);
+        // context.fillStyle = '#FF0000';
+        // context.font = '50px MS PGothic';
+        // context.fillText(`Time: ${timeLeft}`, canvas.width - 225, 0);
 
         //healthbar
         context.fillStyle = '#007700';
@@ -239,6 +234,18 @@ function draw() {
         context.fillStyle = '#004400';
         context.font = '42.5px MS PGothic';
         context.fillText('Health', 90, 72.5);
+
+        //mana
+        context.fillStyle = '#007777';
+        context.fillRect(10, 15, 275, 50);
+        context.fillStyle = '#00FFFF';
+        context.fillRect(10, 15, mana * 25, 50);
+        context.strokeStyle = '#004444';
+        context.lineWidth = 3;
+        context.strokeRect(10, 15, 275, 50);
+        context.fillStyle = '#004444';
+        context.font = '42.5px MS PGothic';
+        context.fillText('Mana', 97.5, 18)
 
         if (game.pause) {
             //drawing a white partially transparent background
