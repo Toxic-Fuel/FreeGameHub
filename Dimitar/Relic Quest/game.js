@@ -1,13 +1,11 @@
 let player = { x: 0, y: 0, width: 55, height: 110, dir: 0, health: 275 };
 let frames = { player: 0, enemies: 0, death: 0 };
 let boss = { x: 0, y: 0, width: 100, height: 150 };
-let camera = { x: 0, y: 0, speed: 4 }, game = { victory: false, loss: false, pause: false, start: true, bossfight: false };
-let magic = { 1: { frames: 0, activated: false }, 2: { frames: 0, activated: false }, 3: { frames: 0, activated: false },
-              4: { frames: 0, activated: false } };
+let camera = { x: 0, y: 0, speed: 4 }, game = { victory: false, loss: false, pause: false, start: true };
 let updates = 0, timeLeft = 250, collectedRunes = 0;
 let runes = [], enemies = [], distanceX = [], distanceY = [], angle = [];
 let deathAnimation = false;
-// const bossfightBGMusic = new Audio('./music/FullScores/Orchestral Scores/bosstheme_WO_low.mp3');
+// const bossfightBGMusic = new Audio('./music/FullScores/Orchestral Scores/bosstheme_WO_low.mp3')
 // const gameplayBGMusic = new Audio('./music/Loops/Drum Only Loops/Ove Melaa - DrumLoop 1.mp3');
 // const winBGMusic = new Audio('./music/FullScores/Orchestral Scores/Ove Melaa - Heaven Sings.mp3');
 // const lossBGMusic = new Audio('./music/FullScores/Orchestral SCores/Ove Melaa - Times.mp3');
@@ -143,7 +141,7 @@ function update() {
 
             //game victory
             if (collectedRunes == 20) {
-                game.bossfight = true;
+                game.victory = true;
             }
 
             //game loss
@@ -311,11 +309,6 @@ function keydown(key) {
         camera.x = 0;
         player.y = 0;
         camera.y = 0;
-    }
-
-    //1st attack
-    if (key == 49) {
-        magic[1].activated = true;
     }
 }
 
