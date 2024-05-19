@@ -7,7 +7,7 @@ class Runes{
 
     collide (playerX, playerY, playerWidth, playerHeight) {
         if (areColliding(this.x, this.y, this.size, this.size, playerX, playerY, playerWidth, playerHeight)) {
-            mana++;
+            player.mana++;
             this.x = NaN;
         }
     }
