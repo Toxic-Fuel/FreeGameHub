@@ -29,10 +29,9 @@ class Enemies{
         this.y += Math.sin(angle) * speed;
     }
 
-    collide (playerX, playerY, playerWidth, playerHeight, bool) {
+    collide (playerX, playerY, playerWidth, playerHeight) {
         if (areColliding(this.x, this.y, this.width, this.height, playerX, playerY, playerWidth, playerHeight)) {
-            this.x = NaN;
-            deathAnimation = true;
+            player.health -= 0.5;
         }
     }
 }
